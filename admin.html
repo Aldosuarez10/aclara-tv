@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@LaClaraTV - Sala de Control</title>
+    <style>
+        body { margin: 0; padding: 20px; background: #1a0e00; color: #fff; font-family: 'Segoe UI', sans-serif; }
+        h1 { text-align: center; color: #ff9d00; margin-bottom: 10px; font-size: 1.5rem; }
+        .instrucciones { text-align: center; color: #aaa; margin-bottom: 20px; font-size: 13px; }
+        
+        .panel-rapido {
+            background: rgba(255, 157, 0, 0.08); border: 1px solid rgba(255, 157, 0, 0.4);
+            border-radius: 12px; padding: 15px; max-width: 800px; margin: 0 auto 20px auto;
+            display: flex; gap: 10px; align-items: center; flex-wrap: wrap; justify-content: center;
+        }
+        .panel-rapido input[type="text"] {
+            flex: 1; min-width: 200px; padding: 10px; background: rgba(0,0,0,0.5);
+            border: 1px solid rgba(255, 157, 0, 0.5); border-radius: 6px; color: #fff; outline: none;
+        }
+        .panel-rapido select {
+            padding: 10px; background: rgba(0,0,0,0.5); border: 1px solid rgba(255, 157, 0, 0.5);
+            border-radius: 6px; color: #fff; cursor: pointer; outline: none;
+        }
+        .btn-agregar {
+            padding: 10px 20px; background: #00ff41; color: #000; font-weight: bold;
+            border: none; border-radius: 6px; cursor: pointer; transition: 0.2s;
+        }
+        .btn-agregar:hover { transform: scale(1.05); box-shadow: 0 0 15px rgba(0, 255, 65, 0.5); }
+
+        .contenedor-categorias {
+            display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;
+        }
+        .categoria {
+            background: rgba(255, 255, 255, 0.05); border: 2px dashed rgba(255, 157, 0, 0.5);
+            border-radius: 12px; padding: 10px; width: 180px; min-height: 200px; /* MÁS COMPACTO */
+            transition: 0.3s; display: flex; flex-direction: column;
+        }
+        .categoria:hover, .categoria.drag-over { background: rgba(255, 157, 0, 0.1); border-color: #00ff41; }
+        .categoria h2 { margin: 0 0 10px 0; font-size: 14px; text-align: center; color: #ff9d00; letter-spacing: 1px; text-transform: uppercase; }
+        .zona-drop { flex-grow: 1; display: flex; flex-direction: column; gap: 8px; }
+        
+        .video-card {
+            background: rgba(0, 0, 0, 0.6); border: 1px solid rgba(255, 157, 0, 0.3);
+            border-radius: 8px; padding: 8px; font-size: 12px; position: relative; animation: aparecer 0.3s ease-out;
+        }
+        @keyframes aparecer { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+        .video-card strong { display: block; color: #fff; margin-bottom: 4px; line-height: 1.2; word-break: break-word; }
+        .video-card small { color: #aaa; display: block; margin-bottom: 2px; word-break: break-all; }
+        
+        .video-card input.edit-titulo {
+            width: 100%; background: rgba(0,0,0,0.8); border: 1px solid #00ff41; color: #fff;
+            padding: 4px; border-radius: 4px; font-size: 12px; margin-bottom: 5px; box-sizing: border-box;
+        }
+        .btn-eliminar {
+            position: absolute; top: 4px; right: 4px; background: rgba(255, 0, 0, 0.2); border: none;
+            color: #ff6b6b; border-radius: 4px; cursor: pointer; font-size: 11px; padding: 2px 5px;
+        }
+        .btn-eliminar:hover { background: rgba(255, 0, 0, 0.5); color: #fff; }
+
+        .btn-guardar {
+            display: block; margin: 30px auto; padding: 12px 30px; background: #00ff41; color: #000;
+            font-weight: bold; font-size: 16px; border: none; border-radius: 8px; cursor: pointer;
+            box-shadow: 0 0 20px rgba(0, 255, 65, 0.3); transition: 0.3s;
+        }
+        .btn-guardar:hover { transform: scale(1.05); box-shadow: 0 0 30px rgba(0, 255, 65, 0.6); }
+    </style>
+</head>
+<body>
+    <h1>📺 @LaClaraTV - Sala de Control</h1>
+    <p class="instrucciones">Arrastra un link o usa la entrada rápida. Si Archive.org falla, edita el título y presiona ENTER.</p>
+    
+    <div class="panel-rapido">
+        <input type="text" id="input-rapido" placeholder="Pega link de Archive.org o ID...">
+        <select id="select-categoria">
+            <option value="ciencia">🧪 CIENCIA</option>
+            <option value="espiritualidad">🕉️ ESPIRITUALIDAD</option>
+            <option value="misterio">🔍 MISTERIO</option>
+            <option value="historia">📜 HISTORIA</option>
+            <option value="bumper">📺 BUMPERS</option>
+        </select>
+        <button class="btn-agregar" onclick="agregarManual()">➕ AGREGAR</button>
+    </div>
+
+    <div class="contenedor-categorias">
+        <div class="categoria" data-categoria="ciencia"><h2>🧪 CIENCIA</h2><div class="zona-drop"></div></div>
+        <div class="categoria" data-categoria="espiritualidad"><h2>🕉️ ESPIRITUALIDAD</h2><div class="zona-drop"></div></div>
+        <div class="categoria" data-categoria="misterio"><h2>🔍 MISTERIO</h2><div class="zona-drop"></div></div>
+        <div class="categoria" data-categoria="historia"><h2>📜 HISTORIA</h2><div class="zona-drop"></div></div>
+        <div class="categoria" data-categoria="bumper"><h2>📺 BUMPERS</h2><div class="zona-drop"></div></div>
+    </div>
+
+    <button class="btn-guardar" onclick="generarJSON()">💾 GENERAR PLAYLIST.JSON</button>
+
+    <script>
+        function extraerID(texto) {
+            texto = texto.trim();
+            if (texto.includes('archive.org/details/')) {
+                return texto.split('archive.org/details/')[1].split('/')[0].split('?')[0];
+            }
+            return texto;
+        }
+
+        function crearTarjetaEnZona(zonaDrop, id, titulo, duracion, estado = 'ok') {
+            const card = document.createElement('div');
+            card.className = 'video-card';
+            card.dataset.id = id;
+            card.dataset.titulo = titulo || id;
+            card.dataset.categoria = zonaDrop.parentElement.dataset.categoria;
+            card.dataset.duracion = duracion || '';
+
+            if (estado === 'cargando') {
+                card.innerHTML = `⏳ Consultando...`;
+            } else if (estado === 'error') {
+                card.innerHTML = `
+                    <button class="btn-eliminar" onclick="this.parentElement.remove()">✕</button>
+                    <input type="text" class="edit-titulo" value="${id}" placeholder="Escribe el título y presiona ENTER...">
+                    <small>ID: <code>${id}</code></small>
+                    <small style="color:#ff9d00">⚠️ Edita y presiona ENTER</small>
+                `;
+            } else {
+                card.innerHTML = `
+                    <button class="btn-eliminar" onclick="this.parentElement.remove()">✕</button>
+                    <strong>${titulo}</strong>
+                    <small>ID: <code>${id}</code></small>
+                    <small>Duración: ${duracion ? duracion + ' min' : 'N/A'}</small>
+                `;
+            }
+            zonaDrop.appendChild(card);
+            return card;
+        }
+
+        async function consultarArchive(id, card) {
+            try {
+                const res = await fetch(`https://archive.org/metadata/${id}`);
+                const data = await res.json();
+                if (data && data.metadata && data.metadata.identifier) {
+                    const titulo = data.metadata.title || id;
+                    const duracion = data.metadata.runtime || '';
+                    card.dataset.titulo = titulo;
+                    card.dataset.duracion = duracion;
+                    card.innerHTML = `
+                        <button class="btn-eliminar" onclick="this.parentElement.remove()">✕</button>
+                        <strong>${titulo}</strong>
+                        <small>ID: <code>${id}</code></small>
+                        <small>Duración: ${duracion ? duracion + ' min' : 'N/A'}</small>
+                    `;
+                } else { throw new Error('No encontrado'); }
+            } catch (error) {
+                const input = card.querySelector('.edit-titulo');
+                card.innerHTML = `
+                    <button class="btn-eliminar" onclick="this.parentElement.remove()">✕</button>
+                    <input type="text" class="edit-titulo" value="${card.dataset.titulo}" placeholder="Escribe el título y presiona ENTER...">
+                    <small>ID: <code>${id}</code></small>
+                    <small style="color:#ff9d00">⚠️ Edita y presiona ENTER</small>
+                `;
+                
+                // RETOQUE 3: Lógica para guardar con ENTER y limpiar el campo principal
+                const nuevoInput = card.querySelector('.edit-titulo');
+                nuevoInput.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') {
+                        e.preventDefault();
+                        card.dataset.titulo = nuevoInput.value; // Guardar el valor editado
+                        // Reemplazar el input por el texto fuerte
+                        const strong = document.createElement('strong');
+                        strong.textContent = nuevoInput.value;
+                        nuevoInput.replaceWith(strong);
+                        // Limpiar y enfocar el campo de entrada rápida para seguir cargando
+                        document.getElementById('input-rapido').value = '';
+                        document.getElementById('input-rapido').focus();
+                    }
+                });
+                nuevoInput.focus();
+            }
+        }
+
+        document.querySelectorAll('.zona-drop').forEach(zone => {
+            zone.addEventListener('dragover', (e) => { e.preventDefault(); zone.parentElement.classList.add('drag-over'); });
+            zone.addEventListener('dragleave', () => { zone.parentElement.classList.remove('drag-over'); });
+            zone.addEventListener('drop', async (e) => {
+                e.preventDefault(); zone.parentElement.classList.remove('drag-over');
+                const texto = e.dataTransfer.getData('text').trim();
+                if (!texto) return;
+                const id = extraerID(texto);
+                const card = crearTarjetaEnZona(zone, id, null, null, 'cargando');
+                await consultarArchive(id, card);
+            });
+        });
+
+        async function agregarManual() {
+            const input = document.getElementById('input-rapido');
+            const select = document.getElementById('select-categoria');
+            const texto = input.value.trim();
+            if (!texto) { alert('Pega un link o ID primero'); return; }
+
+            const id = extraerID(texto);
+            const zonaDrop = document.querySelector(`.categoria[data-categoria="${select.value}"] .zona-drop`);
+            const card = crearTarjetaEnZona(zonaDrop, id, null, null, 'cargando');
+            await consultarArchive(id, card);
+            
+            // Si tuvo éxito, limpiamos el input. Si falló, el focus ya lo maneja consultarArchive.
+            if (!card.querySelector('.edit-titulo')) {
+                input.value = '';
+                input.focus();
+            }
+        }
+
+        document.getElementById('input-rapido').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') agregarManual();
+        });
+
+        function generarJSON() {
+            const playlist = [];
+            document.querySelectorAll('.video-card').forEach(card => {
+                if (card.dataset.id) {
+                    playlist.push({
+                        id: card.dataset.id,
+                        titulo: card.dataset.titulo,
+                        bloque: card.dataset.categoria,
+                        tipo: "archive",
+                        duracion: card.dataset.duracion ? parseInt(card.dataset.duracion) * 60000 : null,
+                        peso: card.dataset.categoria === 'bumper' ? 12 : 9
+                    });
+                }
+            });
+            const blob = new Blob([JSON.stringify(playlist, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url; a.download = 'playlist.json'; a.click();
+            URL.revokeObjectURL(url);
+            alert(`✅ ${playlist.length} items listos. Arrastra "playlist.json" a GitHub Desktop.`);
+        }
+    </script>
+</body>
+</html>
