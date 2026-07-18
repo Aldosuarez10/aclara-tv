@@ -7,93 +7,37 @@
     <style>
         body { margin: 0; padding: 20px; background: #1a0e00; color: #fff; font-family: 'Segoe UI', sans-serif; }
         h1 { text-align: center; color: #ff9d00; margin-bottom: 10px; font-size: 1.5rem; }
-        .instrucciones { text-align: center; color: #aaa; margin-bottom: 20px; font-size: 13px; }
-        
-        .panel-github {
-            background: rgba(0, 255, 65, 0.08); border: 1px solid rgba(0, 255, 65, 0.4);
-            border-radius: 12px; padding: 15px; max-width: 800px; margin: 0 auto 20px auto;
-            display: flex; gap: 10px; align-items: center; flex-wrap: wrap; justify-content: center;
-        }
-        .panel-github input {
-            padding: 10px; background: rgba(0,0,0,0.5); border: 1px solid rgba(0, 255, 65, 0.5);
-            border-radius: 6px; color: #fff; outline: none; font-size: 13px;
-        }
+        .panel-github { background: rgba(0, 255, 65, 0.08); border: 1px solid rgba(0, 255, 65, 0.4); border-radius: 12px; padding: 15px; max-width: 800px; margin: 0 auto 20px auto; display: flex; gap: 10px; align-items: center; flex-wrap: wrap; justify-content: center; }
+        .panel-github input { padding: 10px; background: rgba(0,0,0,0.5); border: 1px solid rgba(0, 255, 65, 0.5); border-radius: 6px; color: #fff; outline: none; font-size: 13px; }
         .panel-github input[type="password"] { width: 250px; }
         .panel-github input[type="text"] { width: 150px; }
-        
-        .panel-rapido {
-            background: rgba(255, 157, 0, 0.08); border: 1px solid rgba(255, 157, 0, 0.4);
-            border-radius: 12px; padding: 15px; max-width: 800px; margin: 0 auto 20px auto;
-            display: flex; gap: 10px; align-items: center; flex-wrap: wrap; justify-content: center;
-        }
-        .panel-rapido input[type="text"] {
-            flex: 1; min-width: 200px; padding: 10px; background: rgba(0,0,0,0.5);
-            border: 1px solid rgba(255, 157, 0, 0.5); border-radius: 6px; color: #fff; outline: none;
-        }
-        .panel-rapido select {
-            padding: 10px; background: rgba(0,0,0,0.5); border: 1px solid rgba(255, 157, 0, 0.5);
-            border-radius: 6px; color: #fff; cursor: pointer; outline: none;
-        }
-        .btn-agregar {
-            padding: 10px 20px; background: #00ff41; color: #000; font-weight: bold;
-            border: none; border-radius: 6px; cursor: pointer; transition: 0.2s;
-        }
-        .btn-agregar:hover { transform: scale(1.05); box-shadow: 0 0 15px rgba(0, 255, 65, 0.5); }
-
+        .panel-rapido { background: rgba(255, 157, 0, 0.08); border: 1px solid rgba(255, 157, 0, 0.4); border-radius: 12px; padding: 15px; max-width: 800px; margin: 0 auto 20px auto; display: flex; gap: 10px; align-items: center; flex-wrap: wrap; justify-content: center; }
+        .panel-rapido input[type="text"] { flex: 1; min-width: 200px; padding: 10px; background: rgba(0,0,0,0.5); border: 1px solid rgba(255, 157, 0, 0.5); border-radius: 6px; color: #fff; outline: none; }
+        .panel-rapido select { padding: 10px; background: rgba(0,0,0,0.5); border: 1px solid rgba(255, 157, 0, 0.5); border-radius: 6px; color: #fff; cursor: pointer; outline: none; }
+        .btn-agregar { padding: 10px 20px; background: #00ff41; color: #000; font-weight: bold; border: none; border-radius: 6px; cursor: pointer; }
         .contenedor-categorias { display: flex; gap: 15px; justify-content: center; flex-wrap: wrap; }
-        .categoria {
-            background: rgba(255, 255, 255, 0.05); border: 2px dashed rgba(255, 157, 0, 0.5);
-            border-radius: 12px; padding: 10px; width: 180px; min-height: 200px;
-            transition: 0.3s; display: flex; flex-direction: column;
-        }
-        .categoria:hover, .categoria.drag-over { background: rgba(255, 157, 0, 0.1); border-color: #00ff41; }
-        .categoria h2 { margin: 0 0 10px 0; font-size: 14px; text-align: center; color: #ff9d00; letter-spacing: 1px; text-transform: uppercase; }
+        .categoria { background: rgba(255, 255, 255, 0.05); border: 2px dashed rgba(255, 157, 0, 0.5); border-radius: 12px; padding: 10px; width: 180px; min-height: 200px; display: flex; flex-direction: column; }
+        .categoria h2 { margin: 0 0 10px 0; font-size: 14px; text-align: center; color: #ff9d00; text-transform: uppercase; }
         .zona-drop { flex-grow: 1; display: flex; flex-direction: column; gap: 8px; }
-        
-        .video-card {
-            background: rgba(0, 0, 0, 0.6); border: 1px solid rgba(255, 157, 0, 0.3);
-            border-radius: 8px; padding: 8px; font-size: 12px; position: relative; animation: aparecer 0.3s ease-out;
-        }
-        @keyframes aparecer { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
-        .video-card strong { display: block; color: #fff; margin-bottom: 4px; line-height: 1.2; word-break: break-word; }
+        .video-card { background: rgba(0, 0, 0, 0.6); border: 1px solid rgba(255, 157, 0, 0.3); border-radius: 8px; padding: 8px; font-size: 12px; position: relative; }
+        .video-card strong { display: block; color: #fff; margin-bottom: 4px; }
         .video-card small { color: #aaa; display: block; margin-bottom: 2px; word-break: break-all; }
-        
-        .video-card input.edit-titulo {
-            width: 100%; background: rgba(0,0,0,0.8); border: 1px solid #00ff41; color: #fff;
-            padding: 4px; border-radius: 4px; font-size: 12px; margin-bottom: 5px; box-sizing: border-box;
-        }
-        .btn-eliminar {
-            position: absolute; top: 4px; right: 4px; background: rgba(255, 0, 0, 0.2); border: none;
-            color: #ff6b6b; border-radius: 4px; cursor: pointer; font-size: 11px; padding: 2px 5px;
-        }
-        .btn-eliminar:hover { background: rgba(255, 0, 0, 0.5); color: #fff; }
-
-        .btn-guardar {
-            display: block; margin: 30px auto; padding: 12px 30px; background: #00ff41; color: #000;
-            font-weight: bold; font-size: 16px; border: none; border-radius: 8px; cursor: pointer;
-            box-shadow: 0 0 20px rgba(0, 255, 65, 0.3); transition: 0.3s;
-        }
-        .btn-guardar:hover { transform: scale(1.05); box-shadow: 0 0 30px rgba(0, 255, 65, 0.6); }
-        .btn-guardar:disabled { background: #555; cursor: not-allowed; box-shadow: none; }
-        
-        .mensaje { text-align: center; padding: 10px; margin: 10px auto; max-width: 600px; border-radius: 6px; display: none; }
-        .mensaje.exito { background: rgba(0, 255, 65, 0.2); border: 1px solid #00ff41; color: #00ff41; display: block; }
-        .mensaje.error { background: rgba(255, 0, 0, 0.2); border: 1px solid #ff0000; color: #ff6b6b; display: block; }
-        .mensaje.proceso { background: rgba(255, 157, 0, 0.2); border: 1px solid #ff9d00; color: #ff9d00; display: block; }
+        .btn-eliminar { position: absolute; top: 4px; right: 4px; background: rgba(255, 0, 0, 0.2); border: none; color: #ff6b6b; border-radius: 4px; cursor: pointer; font-size: 11px; padding: 2px 5px; }
+        .btn-guardar { display: block; margin: 30px auto; padding: 12px 30px; background: #00ff41; color: #000; font-weight: bold; font-size: 16px; border: none; border-radius: 8px; cursor: pointer; }
+        .mensaje { text-align: center; padding: 10px; margin: 10px auto; max-width: 600px; border-radius: 6px; display: none; background: rgba(255, 157, 0, 0.2); border: 1px solid #ff9d00; color: #ff9d00; }
     </style>
 </head>
 <body>
-    <h1>📺 @LaClaraTV - Sala de Control</h1>
-    <p class="instrucciones">Configura GitHub abajo, luego arrastra links o usa la entrada rápida.</p>
+    <h1>📺 @LaClaraTV - Sala de Control (Modo Diagnóstico)</h1>
     
     <div class="panel-github">
-        <input type="text" id="github-user" placeholder="Usuario GitHub" value="Aldosuarez10">
-        <input type="text" id="github-repo" placeholder="Nombre del repo" value="laclara-tv">
-        <input type="password" id="github-token" placeholder="Token de GitHub (ghp_...)">
+        <input type="text" id="github-user" value="Aldosuarez10">
+        <input type="text" id="github-repo" value="laclara-tv">
+        <input type="password" id="github-token" placeholder="Pega tu Token (ghp_...)">
     </div>
 
     <div class="panel-rapido">
-        <input type="text" id="input-rapido" placeholder="Pega link de Archive.org o ID...">
+        <input type="text" id="input-rapido" placeholder="ID o Link de Archive.org...">
         <select id="select-categoria">
             <option value="ciencia">🧪 CIENCIA</option>
             <option value="espiritualidad">🕉️ ESPIRITUALIDAD</option>
@@ -114,214 +58,112 @@
         <div class="categoria" data-categoria="bumper"><h2>📺 BUMPERS</h2><div class="zona-drop"></div></div>
     </div>
 
-    <button class="btn-guardar" id="btn-actualizar" onclick="actualizarGitHub()">🚀 ACTUALIZAR SEÑAL EN GITHUB</button>
+    <button class="btn-guardar" onclick="actualizarGitHub()">🚀 ACTUALIZAR SEÑAL EN GITHUB</button>
 
     <script>
-        function mostrarMensaje(texto, tipo = 'exito') {
+        function mostrarMensaje(texto) {
             const msg = document.getElementById('mensaje');
             msg.textContent = texto;
-            msg.className = `mensaje ${tipo}`;
-            if (tipo !== 'proceso') {
-                setTimeout(() => { msg.className = 'mensaje'; }, 6000);
-            }
+            msg.style.display = 'block';
         }
 
-        function extraerID(texto) {
-            texto = texto.trim();
-            if (texto.includes('archive.org/details/')) {
-                return texto.split('archive.org/details/')[1].split('/')[0].split('?')[0];
-            }
-            return texto;
-        }
-
-        function crearTarjetaEnZona(zonaDrop, id, titulo, duracion, estado = 'ok') {
-            const card = document.createElement('div');
-            card.className = 'video-card';
-            card.dataset.id = id;
-            card.dataset.titulo = titulo || id;
-            card.dataset.categoria = zonaDrop.parentElement.dataset.categoria;
-            card.dataset.duracion = duracion || '';
-
-            if (estado === 'cargando') {
-                card.innerHTML = `⏳ Consultando...`;
-            } else if (estado === 'error') {
-                card.innerHTML = `
-                    <button class="btn-eliminar" onclick="this.parentElement.remove()">✕</button>
-                    <input type="text" class="edit-titulo" value="${id}" placeholder="Escribe el título y presiona ENTER...">
-                    <small>ID: <code>${id}</code></small>
-                    <small style="color:#ff9d00">⚠️ Edita y presiona ENTER</small>
-                `;
-            } else {
-                card.innerHTML = `
-                    <button class="btn-eliminar" onclick="this.parentElement.remove()">✕</button>
-                    <strong>${titulo}</strong>
-                    <small>ID: <code>${id}</code></small>
-                    <small>Duración: ${duracion ? duracion + ' min' : 'N/A'}</small>
-                `;
-            }
-            zonaDrop.appendChild(card);
-            return card;
-        }
-
-        async function consultarArchive(id, card) {
-            try {
-                const res = await fetch(`https://archive.org/metadata/${id}`);
-                const data = await res.json();
-                if (data && data.metadata && data.metadata.identifier) {
-                    const titulo = data.metadata.title || id;
-                    const duracion = data.metadata.runtime || '';
-                    card.dataset.titulo = titulo;
-                    card.dataset.duracion = duracion;
-                    card.innerHTML = `
-                        <button class="btn-eliminar" onclick="this.parentElement.remove()">✕</button>
-                        <strong>${titulo}</strong>
-                        <small>ID: <code>${id}</code></small>
-                        <small>Duración: ${duracion ? duracion + ' min' : 'N/A'}</small>
-                    `;
-                } else { throw new Error('No encontrado'); }
-            } catch (error) {
-                card.innerHTML = `
-                    <button class="btn-eliminar" onclick="this.parentElement.remove()">✕</button>
-                    <input type="text" class="edit-titulo" value="${card.dataset.titulo}" placeholder="Escribe el título y presiona ENTER...">
-                    <small>ID: <code>${id}</code></small>
-                    <small style="color:#ff9d00">⚠️ Edita y presiona ENTER</small>
-                `;
-                
-                const nuevoInput = card.querySelector('.edit-titulo');
-                nuevoInput.addEventListener('keypress', (e) => {
-                    if (e.key === 'Enter') {
-                        e.preventDefault();
-                        card.dataset.titulo = nuevoInput.value;
-                        const strong = document.createElement('strong');
-                        strong.textContent = nuevoInput.value;
-                        nuevoInput.replaceWith(strong);
-                        document.getElementById('input-rapido').value = '';
-                        document.getElementById('input-rapido').focus();
-                    }
-                });
-                nuevoInput.focus();
-            }
-        }
-
-        document.querySelectorAll('.zona-drop').forEach(zone => {
-            zone.addEventListener('dragover', (e) => { e.preventDefault(); zone.parentElement.classList.add('drag-over'); });
-            zone.addEventListener('dragleave', () => { zone.parentElement.classList.remove('drag-over'); });
-            zone.addEventListener('drop', async (e) => {
-                e.preventDefault(); zone.parentElement.classList.remove('drag-over');
-                const texto = e.dataTransfer.getData('text').trim();
-                if (!texto) return;
-                const id = extraerID(texto);
-                const card = crearTarjetaEnZona(zone, id, null, null, 'cargando');
-                await consultarArchive(id, card);
-            });
-        });
-
-        async function agregarManual() {
+        function agregarManual() {
             const input = document.getElementById('input-rapido');
             const select = document.getElementById('select-categoria');
             const texto = input.value.trim();
-            if (!texto) { alert('Pega un link o ID primero'); return; }
-
-            const id = extraerID(texto);
-            const zonaDrop = document.querySelector(`.categoria[data-categoria="${select.value}"] .zona-drop`);
-            const card = crearTarjetaEnZona(zonaDrop, id, null, null, 'cargando');
-            await consultarArchive(id, card);
+            if (!texto) { alert('⚠️ Escribe algo primero'); return; }
             
-            if (!card.querySelector('.edit-titulo')) {
-                input.value = '';
-                input.focus();
-            }
+            const id = texto.includes('archive.org/details/') ? texto.split('archive.org/details/')[1].split('/')[0].split('?')[0] : texto;
+            const zonaDrop = document.querySelector(`.categoria[data-categoria="${select.value}"] .zona-drop`);
+            
+            const card = document.createElement('div');
+            card.className = 'video-card';
+            card.dataset.id = id;
+            card.dataset.titulo = id; // Por defecto
+            card.dataset.categoria = select.value;
+            card.dataset.duracion = '';
+            card.innerHTML = `
+                <button class="btn-eliminar" onclick="this.parentElement.remove()">✕</button>
+                <input type="text" style="width:100%; background:#000; color:#fff; border:1px solid #0f0; margin-bottom:5px;" value="${id}" onchange="this.parentElement.dataset.titulo = this.value">
+                <small>ID: <code>${id}</code></small>
+            `;
+            zonaDrop.appendChild(card);
+            input.value = '';
+            mostrarMensaje('✅ Agregado. (Si Archive.org no cargó el título, puedes escribirlo en la cajita negra de la tarjeta).');
         }
 
-        document.getElementById('input-rapido').addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') agregarManual();
-        });
-
-        // --- FUNCIÓN CORREGIDA PARA GITHUB ---
         async function actualizarGitHub() {
+            alert("PASO 1: Iniciando función...");
+            
             const user = document.getElementById('github-user').value.trim();
             const repo = document.getElementById('github-repo').value.trim();
             const token = document.getElementById('github-token').value.trim();
-            const btn = document.getElementById('btn-actualizar');
 
-            if (!user || !repo || !token) {
-                mostrarMensaje('⚠️ Completa usuario, repo y token de GitHub', 'error');
-                return;
-            }
+            if (!token) { alert("⚠️ FALTA EL TOKEN"); return; }
+            alert(`PASO 2: Datos OK. Usuario: ${user}, Repo: ${repo}`);
 
             const playlist = [];
             document.querySelectorAll('.video-card').forEach(card => {
-                if (card.dataset.id) {
-                    playlist.push({
-                        id: card.dataset.id,
-                        titulo: card.dataset.titulo,
-                        bloque: card.dataset.categoria,
-                        tipo: "archive",
-                        duracion: card.dataset.duracion ? parseInt(card.dataset.duracion) * 60000 : null,
-                        peso: card.dataset.categoria === 'bumper' ? 12 : 9
-                    });
-                }
+                playlist.push({
+                    id: card.dataset.id,
+                    titulo: card.dataset.titulo,
+                    bloque: card.dataset.categoria,
+                    tipo: "archive",
+                    duracion: null,
+                    peso: card.dataset.categoria === 'bumper' ? 12 : 9
+                });
             });
 
-            if (playlist.length === 0) {
-                mostrarMensaje('⚠️ No hay videos en las categorías. Agrega al menos uno.', 'error');
-                return;
-            }
+            if (playlist.length === 0) { alert("⚠️ NO HAY VIDEOS EN LAS CATEGORÍAS"); return; }
+            alert(`PASO 3: ${playlist.length} videos listos. Intentando conectar con GitHub...`);
 
             try {
-                btn.disabled = true;
-                btn.textContent = '⏳ PROCESANDO...';
-                mostrarMensaje('🔄 Consultando estado actual en GitHub...', 'proceso');
-                
-                // 1. Obtener el archivo actual para conseguir su 'sha' (ID interno)
+                // 1. Buscar si existe para obtener el SHA
+                mostrarMensaje('Consultando GitHub...');
                 const getRes = await fetch(`https://api.github.com/repos/${user}/${repo}/contents/playlist.json`, {
-                    headers: { 'Authorization': `token ${token}` }
+                    headers: { 'Authorization': `token ${token}`, 'Accept': 'application/vnd.github.v3+json' }
                 });
+
+                alert(`PASO 4: Respuesta de GitHub: ${getRes.status} ${getRes.statusText}`);
 
                 let sha = null;
                 if (getRes.ok) {
-                    const getData = await getRes.json();
-                    sha = getData.sha; // Lo necesitamos para sobrescribir
-                } else if (getRes.status !== 404) {
-                    throw new Error(`Error al leer el archivo: ${getRes.status}`);
+                    const data = await getRes.json();
+                    sha = data.sha;
+                } else if (getRes.status === 404) {
+                    alert("⚠️ El archivo playlist.json NO EXISTE en GitHub. Debes crearlo manualmente primero (ver Plan B abajo).");
+                    return;
+                } else {
+                    const err = await getRes.json();
+                    alert(`❌ ERROR DE GITHUB: ${err.message}`);
+                    return;
                 }
 
-                mostrarMensaje('🔄 Enviando actualización a GitHub...', 'proceso');
-
-                // 2. Preparar el cuerpo de la petición PUT
+                // 2. Enviar la actualización
+                mostrarMensaje('Enviando datos...');
                 const putBody = {
-                    message: 'Actualización automática desde Sala de Control',
-                    content: btoa(JSON.stringify(playlist, null, 2)), // Codificado en Base64
-                    branch: 'main' // Forzar la rama principal
+                    message: 'Actualización desde Sala de Control',
+                    content: btoa(JSON.stringify(playlist, null, 2)),
+                    branch: 'main'
                 };
+                if (sha) putBody.sha = sha;
 
-                if (sha) {
-                    putBody.sha = sha; // Si el archivo ya existe, enviamos su sha
-                }
-
-                // 3. Enviar la actualización
                 const putRes = await fetch(`https://api.github.com/repos/${user}/${repo}/contents/playlist.json`, {
                     method: 'PUT',
-                    headers: {
-                        'Authorization': `token ${token}`,
-                        'Content-Type': 'application/json',
-                    },
+                    headers: { 'Authorization': `token ${token}`, 'Content-Type': 'application/json' },
                     body: JSON.stringify(putBody)
                 });
 
                 if (putRes.ok) {
-                    mostrarMensaje(`✅ ¡SEÑAL ACTUALIZADA CON ÉXITO! ${playlist.length} videos enviados a GitHub.`, 'exito');
+                    alert("🎉 ¡ÉXITO TOTAL! La señal se actualizó en GitHub.");
+                    mostrarMensaje('✅ ¡SEÑAL ACTUALIZADA CON ÉXITO!');
                 } else {
-                    const errorData = await putRes.json();
-                    mostrarMensaje(`❌ Error de GitHub: ${errorData.message}`, 'error');
-                    console.error("Detalle del error:", errorData);
+                    const err = await putRes.json();
+                    alert(`❌ FALLÓ LA ACTUALIZACIÓN: ${err.message}`);
                 }
             } catch (error) {
-                mostrarMensaje(`❌ Error de red: ${error.message}`, 'error');
+                alert(`❌ ERROR DE RED O CORS: ${error.message}\n\nRevisa la consola (F12) para más detalles.`);
                 console.error(error);
-            } finally {
-                btn.disabled = false;
-                btn.textContent = '🚀 ACTUALIZAR SEÑAL EN GITHUB';
             }
         }
     </script>
