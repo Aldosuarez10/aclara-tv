@@ -9,6 +9,19 @@
         h1 { text-align: center; color: #ff9d00; margin-bottom: 10px; font-size: 1.5rem; }
         .instrucciones { text-align: center; color: #aaa; margin-bottom: 20px; font-size: 13px; }
         
+        /* PANEL DE CONFIGURACIÓN GITHUB */
+        .panel-github {
+            background: rgba(0, 255, 65, 0.08); border: 1px solid rgba(0, 255, 65, 0.4);
+            border-radius: 12px; padding: 15px; max-width: 800px; margin: 0 auto 20px auto;
+            display: flex; gap: 10px; align-items: center; flex-wrap: wrap; justify-content: center;
+        }
+        .panel-github input {
+            padding: 10px; background: rgba(0,0,0,0.5); border: 1px solid rgba(0, 255, 65, 0.5);
+            border-radius: 6px; color: #fff; outline: none; font-size: 13px;
+        }
+        .panel-github input[type="password"] { width: 250px; }
+        .panel-github input[type="text"] { width: 150px; }
+        
         .panel-rapido {
             background: rgba(255, 157, 0, 0.08); border: 1px solid rgba(255, 157, 0, 0.4);
             border-radius: 12px; padding: 15px; max-width: 800px; margin: 0 auto 20px auto;
@@ -28,12 +41,10 @@
         }
         .btn-agregar:hover { transform: scale(1.05); box-shadow: 0 0 15px rgba(0, 255, 65, 0.5); }
 
-        .contenedor-categorias {
-            display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;
-        }
+        .contenedor-categorias { display: flex; gap: 15px; justify-content: center; flex-wrap: wrap; }
         .categoria {
             background: rgba(255, 255, 255, 0.05); border: 2px dashed rgba(255, 157, 0, 0.5);
-            border-radius: 12px; padding: 10px; width: 180px; min-height: 200px; /* MÁS COMPACTO */
+            border-radius: 12px; padding: 10px; width: 180px; min-height: 200px;
             transition: 0.3s; display: flex; flex-direction: column;
         }
         .categoria:hover, .categoria.drag-over { background: rgba(255, 157, 0, 0.1); border-color: #00ff41; }
@@ -64,12 +75,24 @@
             box-shadow: 0 0 20px rgba(0, 255, 65, 0.3); transition: 0.3s;
         }
         .btn-guardar:hover { transform: scale(1.05); box-shadow: 0 0 30px rgba(0, 255, 65, 0.6); }
+        
+        .mensaje { text-align: center; padding: 10px; margin: 10px auto; max-width: 600px; border-radius: 6px; display: none; }
+        .mensaje.exito { background: rgba(0, 255, 65, 0.2); border: 1px solid #00ff41; color: #00ff41; display: block; }
+        .mensaje.error { background: rgba(255, 0, 0, 0.2); border: 1px solid #ff0000; color: #ff6b6b; display: block; }
     </style>
 </head>
 <body>
     <h1>📺 @LaClaraTV - Sala de Control</h1>
-    <p class="instrucciones">Arrastra un link o usa la entrada rápida. Si Archive.org falla, edita el título y presiona ENTER.</p>
+    <p class="instrucciones">Configura GitHub abajo, luego arrastra links o usa la entrada rápida.</p>
     
+    <!-- PANEL DE CONFIGURACIÓN GITHUB -->
+    <div class="panel-github">
+        <input type="text" id="github-user" placeholder="Usuario GitHub" value="Aldosuarez10">
+        <input type="text" id="github-repo" placeholder="Nombre del repo" value="laclara-tv">
+        <input type="password" id="github-token" placeholder="Token de GitHub (ghp_...)">
+    </div>
+
+    <!-- PANEL DE ENTRADA RÁPIDA -->
     <div class="panel-rapido">
         <input type="text" id="input-rapido" placeholder="Pega link de Archive.org o ID...">
         <select id="select-categoria">
@@ -82,6 +105,8 @@
         <button class="btn-agregar" onclick="agregarManual()">➕ AGREGAR</button>
     </div>
 
+    <div id="mensaje" class="mensaje"></div>
+
     <div class="contenedor-categorias">
         <div class="categoria" data-categoria="ciencia"><h2>🧪 CIENCIA</h2><div class="zona-drop"></div></div>
         <div class="categoria" data-categoria="espiritualidad"><h2>🕉️ ESPIRITUALIDAD</h2><div class="zona-drop"></div></div>
@@ -90,9 +115,16 @@
         <div class="categoria" data-categoria="bumper"><h2>📺 BUMPERS</h2><div class="zona-drop"></div></div>
     </div>
 
-    <button class="btn-guardar" onclick="generarJSON()">💾 GENERAR PLAYLIST.JSON</button>
+    <button class="btn-guardar" onclick="actualizarGitHub()">🚀 ACTUALIZAR SEÑAL EN GITHUB</button>
 
     <script>
+        function mostrarMensaje(texto, tipo = 'exito') {
+            const msg = document.getElementById('mensaje');
+            msg.textContent = texto;
+            msg.className = `mensaje ${tipo}`;
+            setTimeout(() => { msg.className = 'mensaje'; }, 5000);
+        }
+
         function extraerID(texto) {
             texto = texto.trim();
             if (texto.includes('archive.org/details/')) {
@@ -147,7 +179,6 @@
                     `;
                 } else { throw new Error('No encontrado'); }
             } catch (error) {
-                const input = card.querySelector('.edit-titulo');
                 card.innerHTML = `
                     <button class="btn-eliminar" onclick="this.parentElement.remove()">✕</button>
                     <input type="text" class="edit-titulo" value="${card.dataset.titulo}" placeholder="Escribe el título y presiona ENTER...">
@@ -155,17 +186,14 @@
                     <small style="color:#ff9d00">⚠️ Edita y presiona ENTER</small>
                 `;
                 
-                // RETOQUE 3: Lógica para guardar con ENTER y limpiar el campo principal
                 const nuevoInput = card.querySelector('.edit-titulo');
                 nuevoInput.addEventListener('keypress', (e) => {
                     if (e.key === 'Enter') {
                         e.preventDefault();
-                        card.dataset.titulo = nuevoInput.value; // Guardar el valor editado
-                        // Reemplazar el input por el texto fuerte
+                        card.dataset.titulo = nuevoInput.value;
                         const strong = document.createElement('strong');
                         strong.textContent = nuevoInput.value;
                         nuevoInput.replaceWith(strong);
-                        // Limpiar y enfocar el campo de entrada rápida para seguir cargando
                         document.getElementById('input-rapido').value = '';
                         document.getElementById('input-rapido').focus();
                     }
@@ -198,7 +226,6 @@
             const card = crearTarjetaEnZona(zonaDrop, id, null, null, 'cargando');
             await consultarArchive(id, card);
             
-            // Si tuvo éxito, limpiamos el input. Si falló, el focus ya lo maneja consultarArchive.
             if (!card.querySelector('.edit-titulo')) {
                 input.value = '';
                 input.focus();
@@ -209,7 +236,16 @@
             if (e.key === 'Enter') agregarManual();
         });
 
-        function generarJSON() {
+        async function actualizarGitHub() {
+            const user = document.getElementById('github-user').value.trim();
+            const repo = document.getElementById('github-repo').value.trim();
+            const token = document.getElementById('github-token').value.trim();
+
+            if (!user || !repo || !token) {
+                mostrarMensaje('⚠️ Completa usuario, repo y token de GitHub', 'error');
+                return;
+            }
+
             const playlist = [];
             document.querySelectorAll('.video-card').forEach(card => {
                 if (card.dataset.id) {
@@ -223,12 +259,36 @@
                     });
                 }
             });
-            const blob = new Blob([JSON.stringify(playlist, null, 2)], { type: 'application/json' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url; a.download = 'playlist.json'; a.click();
-            URL.revokeObjectURL(url);
-            alert(`✅ ${playlist.length} items listos. Arrastra "playlist.json" a GitHub Desktop.`);
+
+            if (playlist.length === 0) {
+                mostrarMensaje('⚠️ No hay videos en las categorías', 'error');
+                return;
+            }
+
+            try {
+                mostrarMensaje('🔄 Actualizando GitHub...');
+                
+                const res = await fetch(`https://api.github.com/repos/${user}/${repo}/contents/playlist.json`, {
+                    method: 'PUT',
+                    headers: {
+                        'Authorization': `token ${token}`,
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        message: 'Actualización automática desde Sala de Control',
+                        content: btoa(JSON.stringify(playlist, null, 2)),
+                    })
+                });
+
+                if (res.ok) {
+                    mostrarMensaje(`✅ ¡Señal actualizada! ${playlist.length} videos en GitHub.`, 'exito');
+                } else {
+                    const error = await res.json();
+                    mostrarMensaje(`❌ Error: ${error.message}`, 'error');
+                }
+            } catch (error) {
+                mostrarMensaje(`❌ Error de red: ${error.message}`, 'error');
+            }
         }
     </script>
 </body>
