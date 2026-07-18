@@ -15,7 +15,7 @@
             width: min(1000px, 92vw); aspect-ratio: 16/9; background: #000; border: 18px solid #0a0a0a; border-radius: 8px;
             box-shadow: 0 0 60px rgba(255, 157, 0, 0.4), 0 0 100px rgba(255, 157, 0, 0.2), 0 30px 60px rgba(0,0,0,0.95), inset 0 0 0 1px rgba(255,255,255,0.05);
             position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center; z-index: 5;
-            cursor: pointer; /* Indica que se puede tocar para pausar */
+            cursor: pointer;
         }
         #marco-tv::before {
             content: ''; position: absolute; inset: 0;
@@ -137,7 +137,6 @@
             border: none; transform: scale(1.05); z-index: 2; background: #000;
         }
 
-        /* PANTALLA FUERA DE AIRE */
         #pantalla-fuera-aire {
             display: none; position: absolute; inset: 0; 
             background: radial-gradient(circle at center, #4a2800 0%, #1a0e00 100%); 
@@ -185,7 +184,6 @@
         </div>
     </div>
 
-    <!-- PANTALLA DE FUERA DE AIRE -->
     <div id="pantalla-fuera-aire">
         <div style="font-size: 4rem; margin-bottom: 20px;">📺</div>
         <h1 style="color: #ff9d00; font-size: 2rem; margin: 0; font-weight: 700;">@LaClaraTV</h1>
@@ -198,7 +196,6 @@
     </div>
 
     <script>
-        // BIBLIOTECA POR DEFECTO (Se usa si no hay playlist.json o como fallback)
         const bibliotecaDefault = [
             { id: "bamper-central-1", titulo: "Bumper Central 1", bloque: "bumper", peso: 12, tipo: "archive", duracion: 15000 },
             { id: "bamper-2", titulo: "Bumper Central 2", bloque: "bumper", peso: 12, tipo: "archive", duracion: 15000 },
@@ -207,24 +204,22 @@
             { id: "astronomia-vieja-impostora", titulo: "Astronomia Vieja Impostora", bloque: "ciencia", peso: 12, tipo: "archive" },
             { id: "antartida-la-tierra-prohibida-aportes-la-claraboya", titulo: "Antartida La Tierra Prohibida Aportes La Claraboya", bloque: "ciencia", peso: 12, tipo: "archive" },
             { id: "la-rueda-de-samsara", titulo: "La Rueda de Samsara", bloque: "espiritualidad", peso: 12, tipo: "archive" },
-            { id: "TheSecretLandHighJump194769min", titulo: "The Secret Land (Operacion Highjump)", bloque: "misterio", peso: 9, tipo: "archive", duracion: 4177000 },
+            { id: "TheSecretLandHighJump194769min", titulo: "The Secret Land (Operacion Highjump)", bloque: "misterio", peso: 9, tipo: "archive" },
             { id: "Pre-Columbian_Trans-Oceanic_Contact", titulo: "Contacto Transoceanico Precolombino", bloque: "historia", peso: 9, tipo: "archive" },
-            { id: "ovni-miguel-pedrero", titulo: "OVNI: Una Explicacion que no va a Gustar a Nadie", bloque: "misterio", peso: 9, tipo: "archive", duracion: 4145000 },
-            { id: "energia-libre-carrera-hacia-el-punto-cero", titulo: "Energia Libre: Carrera Hacia el Punto Cero", bloque: "ciencia", peso: 9, tipo: "archive", duracion: 6578000 },
-            { id: "DocumentalELSECRETOLALEYDELAATRACCIONTheSecretEspanol", titulo: "El Secreto: La Ley de la Atraccion", bloque: "espiritualidad", peso: 9, tipo: "archive", duracion: 5462000 },
+            { id: "ovni-miguel-pedrero", titulo: "OVNI: Una Explicacion que no va a Gustar a Nadie", bloque: "misterio", peso: 9, tipo: "archive" },
+            { id: "energia-libre-carrera-hacia-el-punto-cero", titulo: "Energia Libre: Carrera Hacia el Punto Cero", bloque: "ciencia", peso: 9, tipo: "archive" },
+            { id: "DocumentalELSECRETOLALEYDELAATRACCIONTheSecretEspanol", titulo: "El Secreto: La Ley de la Atraccion", bloque: "espiritualidad", peso: 9, tipo: "archive" },
             { id: "viernes", titulo: "Viernes Misticos", bloque: "externo", url: "https://aldosuarez10.github.io/viernes-misticos-radio/", tipo: "web" },
             { id: "universo", titulo: "Universo 2 Anillo", bloque: "externo", url: "https://aldosuarez10.github.io/universo_segundo_anillo/", tipo: "web" }
         ];
 
         let biblioteca = [...bibliotecaDefault];
-        const DURACION_POR_DEFECTO = 25 * 60 * 1000;
-        const UMBRAL_VIDEO_LARGO = 20 * 60; // 20 minutos en segundos
-
         let tvEncendida = false;
         let colaBumpers = [];
         let ultimoIdMostrado = null;
         let timerAvance = null;
         let capaActiva = 1;
+        let bloqueActual = null;
 
         function mostrarFueraDeAire() {
             document.getElementById('pantalla-fuera-aire').style.display = 'flex';
@@ -242,21 +237,19 @@
                 validarBiblioteca(); 
             } catch (error) {
                 console.warn("No se pudo cargar playlist.json, usando biblioteca por defecto.", error);
-                // Si quieres que muestre "Fuera de Aire" estrictamente cuando no hay JSON, descomenta la siguiente línea:
-                // mostrarFueraDeAire(); return;
                 validarBiblioteca();
             }
         }
 
         async function validarBiblioteca() {
             const estado = document.getElementById('estado-cargando');
-            const cacheKey = 'laclara_tv_validacion_v4';
+            const cacheKey = 'laclara_tv_validacion_v5';
             const cache = JSON.parse(localStorage.getItem(cacheKey));
             const ahora = Date.now();
 
             if (cache && (ahora - cache.timestamp < 86400000)) {
                 biblioteca = cache.bibliotecaValida;
-                console.log("✅ Señal restaurada desde caché (Cero llamadas a API)");
+                console.log("✅ Señal restaurada desde caché");
                 return;
             }
 
@@ -361,6 +354,7 @@
             if (!tvEncendida) return;
             document.getElementById('osd-menu').classList.remove('activo');
             clearTimeout(timerAvance);
+            bloqueActual = bloque;
 
             if (bloque === 'viernes' || bloque === 'universo') {
                 const canal = biblioteca.find(v => v.id === bloque);
@@ -377,19 +371,16 @@
             const video = elegirSiguiente(bloque);
             if (!video) { cambiarCanal('zapping'); return; }
             mostrarEnPantalla(video);
-            timerAvance = setTimeout(() => reproducirBloqueFijo(bloque), video.duracion || DURACION_POR_DEFECTO);
         }
 
         function reproducirSiguienteEnCola() {
             if (colaBumpers.length > 0) {
                 const bumper = colaBumpers.shift();
                 mostrarEnPantalla(bumper);
-                timerAvance = setTimeout(reproducirSiguienteEnCola, bumper.duracion || 15000);
             } else {
                 const video = elegirSiguiente();
                 if (!video) return;
                 mostrarEnPantalla(video);
-                timerAvance = setTimeout(reproducirSiguienteEnCola, video.duracion || DURACION_POR_DEFECTO);
             }
         }
 
@@ -404,7 +395,7 @@
             const osdTitulo = document.getElementById('osd-titulo');
             osdTitulo.textContent = item.titulo;
             osdTitulo.classList.add('visible');
-            setTimeout(() => osdTitulo.classList.remove('visible'), 8000); // 8 SEGUNDOS
+            setTimeout(() => osdTitulo.classList.remove('visible'), 8000);
 
             const layer1 = document.getElementById('video-layer-1');
             const layer2 = document.getElementById('video-layer-2');
@@ -427,11 +418,11 @@
             layer2.style.display = 'block';
 
             if (item.url_video) {
-                cambiarCapaVideo(item.url_video, offsetSegundos);
+                cambiarCapaVideo(item.url_video, offsetSegundos, item);
             }
         }
 
-        function cambiarCapaVideo(url, offset) {
+        function cambiarCapaVideo(url, offset, item) {
             const layer1 = document.getElementById('video-layer-1');
             const layer2 = document.getElementById('video-layer-2');
             
@@ -493,10 +484,8 @@
         setInterval(actualizarReloj, 1000);
         actualizarReloj();
 
-        // TOCAR LA PANTALLA PAUSA / REANUDA (NATIVO)
         document.getElementById('marco-tv').addEventListener('click', function(e) {
             if (!tvEncendida) return;
-            // Si tocamos el menú o el control, no hacemos nada aquí
             if (e.target.closest('#osd-menu') || e.target.closest('#control')) return;
             
             const activeLayer = capaActiva === 1 ? document.getElementById('video-layer-1') : document.getElementById('video-layer-2');
@@ -507,10 +496,12 @@
             }
         });
 
+        // CUANDO UN VIDEO TERMINA, PASAR AL SIGUIENTE
         document.querySelectorAll('.video-layer').forEach(layer => {
             layer.addEventListener('loadedmetadata', function() {
                 if (this.dataset.randomStart === 'true') {
-                    if (this.duration > UMBRAL_VIDEO_LARGO) {
+                    // Solo arrancar empezado si dura más de 20 minutos
+                    if (this.duration > 1200) {
                         let target = Math.floor(Math.random() * 300) + 120;
                         this.currentTime = (this.duration < target) ? Math.max(0, this.duration - 30) : target;
                     } else {
@@ -521,6 +512,22 @@
                     let target = parseFloat(this.dataset.targetOffset);
                     this.currentTime = (this.duration && this.duration < target) ? Math.max(0, this.duration - 30) : target;
                     delete this.dataset.targetOffset;
+                }
+            });
+
+            // EVENTO CLAVE: Cuando el video termina naturalmente
+            layer.addEventListener('ended', function() {
+                if (!tvEncendida) return;
+                
+                // Si estábamos en modo zapping con bumpers
+                if (colaBumpers.length > 0) {
+                    reproducirSiguienteEnCola();
+                } else if (bloqueActual && bloqueActual !== 'zapping') {
+                    // Si estábamos en una categoría específica
+                    reproducirBloqueFijo(bloqueActual);
+                } else {
+                    // Si estábamos en zapping general
+                    reproducirSiguienteEnCola();
                 }
             });
         });
