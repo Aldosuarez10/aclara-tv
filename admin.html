@@ -9,7 +9,6 @@
         h1 { text-align: center; color: #ff9d00; margin-bottom: 10px; font-size: 1.5rem; }
         .instrucciones { text-align: center; color: #aaa; margin-bottom: 20px; font-size: 13px; }
         
-        /* PANEL DE CONFIGURACIÓN GITHUB */
         .panel-github {
             background: rgba(0, 255, 65, 0.08); border: 1px solid rgba(0, 255, 65, 0.4);
             border-radius: 12px; padding: 15px; max-width: 800px; margin: 0 auto 20px auto;
@@ -75,24 +74,24 @@
             box-shadow: 0 0 20px rgba(0, 255, 65, 0.3); transition: 0.3s;
         }
         .btn-guardar:hover { transform: scale(1.05); box-shadow: 0 0 30px rgba(0, 255, 65, 0.6); }
+        .btn-guardar:disabled { background: #555; cursor: not-allowed; box-shadow: none; }
         
         .mensaje { text-align: center; padding: 10px; margin: 10px auto; max-width: 600px; border-radius: 6px; display: none; }
         .mensaje.exito { background: rgba(0, 255, 65, 0.2); border: 1px solid #00ff41; color: #00ff41; display: block; }
         .mensaje.error { background: rgba(255, 0, 0, 0.2); border: 1px solid #ff0000; color: #ff6b6b; display: block; }
+        .mensaje.proceso { background: rgba(255, 157, 0, 0.2); border: 1px solid #ff9d00; color: #ff9d00; display: block; }
     </style>
 </head>
 <body>
     <h1>📺 @LaClaraTV - Sala de Control</h1>
     <p class="instrucciones">Configura GitHub abajo, luego arrastra links o usa la entrada rápida.</p>
     
-    <!-- PANEL DE CONFIGURACIÓN GITHUB -->
     <div class="panel-github">
         <input type="text" id="github-user" placeholder="Usuario GitHub" value="Aldosuarez10">
         <input type="text" id="github-repo" placeholder="Nombre del repo" value="laclara-tv">
         <input type="password" id="github-token" placeholder="Token de GitHub (ghp_...)">
     </div>
 
-    <!-- PANEL DE ENTRADA RÁPIDA -->
     <div class="panel-rapido">
         <input type="text" id="input-rapido" placeholder="Pega link de Archive.org o ID...">
         <select id="select-categoria">
@@ -115,14 +114,16 @@
         <div class="categoria" data-categoria="bumper"><h2>📺 BUMPERS</h2><div class="zona-drop"></div></div>
     </div>
 
-    <button class="btn-guardar" onclick="actualizarGitHub()">🚀 ACTUALIZAR SEÑAL EN GITHUB</button>
+    <button class="btn-guardar" id="btn-actualizar" onclick="actualizarGitHub()">🚀 ACTUALIZAR SEÑAL EN GITHUB</button>
 
     <script>
         function mostrarMensaje(texto, tipo = 'exito') {
             const msg = document.getElementById('mensaje');
             msg.textContent = texto;
             msg.className = `mensaje ${tipo}`;
-            setTimeout(() => { msg.className = 'mensaje'; }, 5000);
+            if (tipo !== 'proceso') {
+                setTimeout(() => { msg.className = 'mensaje'; }, 6000);
+            }
         }
 
         function extraerID(texto) {
@@ -236,10 +237,12 @@
             if (e.key === 'Enter') agregarManual();
         });
 
+        // --- FUNCIÓN CORREGIDA PARA GITHUB ---
         async function actualizarGitHub() {
             const user = document.getElementById('github-user').value.trim();
             const repo = document.getElementById('github-repo').value.trim();
             const token = document.getElementById('github-token').value.trim();
+            const btn = document.getElementById('btn-actualizar');
 
             if (!user || !repo || !token) {
                 mostrarMensaje('⚠️ Completa usuario, repo y token de GitHub', 'error');
@@ -261,33 +264,64 @@
             });
 
             if (playlist.length === 0) {
-                mostrarMensaje('⚠️ No hay videos en las categorías', 'error');
+                mostrarMensaje('⚠️ No hay videos en las categorías. Agrega al menos uno.', 'error');
                 return;
             }
 
             try {
-                mostrarMensaje('🔄 Actualizando GitHub...');
+                btn.disabled = true;
+                btn.textContent = '⏳ PROCESANDO...';
+                mostrarMensaje('🔄 Consultando estado actual en GitHub...', 'proceso');
                 
-                const res = await fetch(`https://api.github.com/repos/${user}/${repo}/contents/playlist.json`, {
+                // 1. Obtener el archivo actual para conseguir su 'sha' (ID interno)
+                const getRes = await fetch(`https://api.github.com/repos/${user}/${repo}/contents/playlist.json`, {
+                    headers: { 'Authorization': `token ${token}` }
+                });
+
+                let sha = null;
+                if (getRes.ok) {
+                    const getData = await getRes.json();
+                    sha = getData.sha; // Lo necesitamos para sobrescribir
+                } else if (getRes.status !== 404) {
+                    throw new Error(`Error al leer el archivo: ${getRes.status}`);
+                }
+
+                mostrarMensaje('🔄 Enviando actualización a GitHub...', 'proceso');
+
+                // 2. Preparar el cuerpo de la petición PUT
+                const putBody = {
+                    message: 'Actualización automática desde Sala de Control',
+                    content: btoa(JSON.stringify(playlist, null, 2)), // Codificado en Base64
+                    branch: 'main' // Forzar la rama principal
+                };
+
+                if (sha) {
+                    putBody.sha = sha; // Si el archivo ya existe, enviamos su sha
+                }
+
+                // 3. Enviar la actualización
+                const putRes = await fetch(`https://api.github.com/repos/${user}/${repo}/contents/playlist.json`, {
                     method: 'PUT',
                     headers: {
                         'Authorization': `token ${token}`,
                         'Content-Type': 'application/json',
                     },
-                    body: JSON.stringify({
-                        message: 'Actualización automática desde Sala de Control',
-                        content: btoa(JSON.stringify(playlist, null, 2)),
-                    })
+                    body: JSON.stringify(putBody)
                 });
 
-                if (res.ok) {
-                    mostrarMensaje(`✅ ¡Señal actualizada! ${playlist.length} videos en GitHub.`, 'exito');
+                if (putRes.ok) {
+                    mostrarMensaje(`✅ ¡SEÑAL ACTUALIZADA CON ÉXITO! ${playlist.length} videos enviados a GitHub.`, 'exito');
                 } else {
-                    const error = await res.json();
-                    mostrarMensaje(`❌ Error: ${error.message}`, 'error');
+                    const errorData = await putRes.json();
+                    mostrarMensaje(`❌ Error de GitHub: ${errorData.message}`, 'error');
+                    console.error("Detalle del error:", errorData);
                 }
             } catch (error) {
                 mostrarMensaje(`❌ Error de red: ${error.message}`, 'error');
+                console.error(error);
+            } finally {
+                btn.disabled = false;
+                btn.textContent = '🚀 ACTUALIZAR SEÑAL EN GITHUB';
             }
         }
     </script>
