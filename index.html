@@ -228,19 +228,26 @@
         }
 
         async function cargarPlaylist() {
-            try {
-                const res = await fetch('playlist.json');
-                if (!res.ok) throw new Error('No se encontró la programación');
-                const data = await res.json();
-                biblioteca = data.filter(item => item.id && item.bloque);
-                console.log(`✅ Playlist.json cargada: ${biblioteca.length} items.`);
-                validarBiblioteca(); 
-            } catch (error) {
-                console.warn("No se pudo cargar playlist.json, usando biblioteca por defecto.", error);
-                validarBiblioteca();
+    try {
+        const res = await fetch('playlist.json');
+        if (!res.ok) throw new Error('No se encontró');
+        const data = await res.json();
+        const jsonItems = data.filter(item => item.id && item.bloque);
+        
+        // NUNCA pisar el default, solo agregar
+        const idsExistentes = new Set(biblioteca.map(v => v.id));
+        jsonItems.forEach(item => {
+            if (!idsExistentes.has(item.id)) {
+                biblioteca.push(item);
             }
-        }
-
+        });
+        console.log(`✅ Biblioteca total: ${biblioteca.length} items.`);
+        validarBiblioteca(); 
+    } catch (error) {
+        console.warn("Sin playlist.json, usando default.", error);
+        validarBiblioteca();
+    }
+}
         async function validarBiblioteca() {
             const estado = document.getElementById('estado-cargando');
             const cacheKey = 'laclara_tv_validacion_v5';
