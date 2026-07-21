@@ -7,86 +7,162 @@
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>%F0%9F%93%BA</text></svg>">
 
     <style>
-        :root { --accent: #ff9d00; --glow: rgba(255, 157, 0, 0.3); --menu-bg: rgba(0, 0, 0, 0.85); --menu-text: #fff; }
-        body, html { margin: 0; padding: 0; width: 100%; height: 100%; background: radial-gradient(circle at center, #2c1a04 0%, #0c0700 100%); overflow: hidden; font-family: 'Segoe UI', sans-serif; }
+        :root { --accent: #ff9d00; --glow: rgba(255, 157, 0, 0.3); --menu-bg: rgba(119, 214, 255, 0.25); --menu-text: #001a33; }
+        body, html { margin: 0; padding: 0; width: 100%; height: 100%; background: radial-gradient(circle at center, #4a2800 0%, #1a0e00 100%); overflow: hidden; font-family: 'Segoe UI', sans-serif; }
         #escenario { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; position: relative; }
 
-        /* MARCO DE LA TELE */
         #marco-tv {
             width: min(1000px, 92vw); aspect-ratio: 16/9; background: #000; border: 18px solid #0a0a0a; border-radius: 8px;
-            box-shadow: 0 0 60px rgba(255, 157, 0, 0.3), 0 30px 60px rgba(0,0,0,0.95);
+            box-shadow: 0 0 60px rgba(255, 157, 0, 0.4), 0 0 100px rgba(255, 157, 0, 0.2), 0 30px 60px rgba(0,0,0,0.95), inset 0 0 0 1px rgba(255,255,255,0.05);
             position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center; z-index: 5;
+            cursor: pointer;
+        }
+        #marco-tv::before {
+            content: ''; position: absolute; inset: 0;
+            background: radial-gradient(circle at 20% 30%, rgba(255,255,255,0.08) 0%, transparent 40%), radial-gradient(circle at 80% 70%, rgba(255,255,255,0.05) 0%, transparent 40%);
+            pointer-events: none; z-index: 1;
         }
 
         #logo-estacion {
             position: absolute; top: 25px; right: 35px; font-weight: 700; font-size: 20px; letter-spacing: 1px;
-            color: var(--accent); z-index: 10; user-select: none; opacity: 0.6; text-shadow: 0 2px 4px #000;
+            background: linear-gradient(120deg, #ff0080 0%, #ff8c00 25%, #40e0d0 50%, #ff0080 75%, #ff8c00 100%);
+            background-size: 200% 200%; -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+            animation: tornasol 8s ease-in-out infinite; z-index: 10; user-select: none;
         }
+        @keyframes tornasol { 0%, 100% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } }
 
         #en-vivo {
             position: absolute; top: 25px; left: 35px; z-index: 10; display: none; align-items: center; gap: 8px;
-            color: #fff; font-weight: bold; font-size: 14px; text-shadow: 0 0 10px rgba(255,0,0,0.5);
+            color: #fff; font-weight: bold; font-size: 14px; letter-spacing: 1px; text-shadow: 0 0 10px rgba(255,0,0,0.5);
+            user-select: none; -webkit-user-select: none;
         }
         .punto-rojo { width: 10px; height: 10px; background: #f00; border-radius: 50%; box-shadow: 0 0 8px #f00; animation: parpadeo 1.5s infinite; }
         @keyframes parpadeo { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
 
+        #reloj-en-vivo {
+            position: absolute; bottom: 25px; left: 35px; z-index: 10;
+            color: rgba(255, 255, 255, 0.8); font-family: 'Courier New', monospace;
+            font-size: 16px; font-weight: bold; letter-spacing: 2px;
+            text-shadow: 0 0 5px rgba(0,0,0,0.9); user-select: none;
+        }
+
         #osd-titulo {
-            position: absolute; bottom: 40px; left: 35px; z-index: 15;
+            position: absolute; bottom: 60px; left: 35px; z-index: 15;
             background: rgba(0,0,0,0.85); color: #fff; padding: 10px 18px;
             border-left: 4px solid var(--accent); border-radius: 0 6px 6px 0;
-            font-size: 15px; font-weight: 600; opacity: 0; transform: translateX(-20px);
+            font-size: 15px; font-weight: 600; letter-spacing: 0.5px;
+            opacity: 0; transform: translateX(-20px);
             transition: all 0.4s ease-out; pointer-events: none;
+            max-width: 65%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
         }
         #osd-titulo.visible { opacity: 1; transform: translateX(0); }
 
-        /* PANTALLA DE ESPERA */
-        #sintonia { text-align: center; color: var(--accent); z-index: 5; text-shadow: 0 0 15px var(--glow); }
+        #estado-cargando {
+            position: absolute; bottom: 25px; right: 35px; z-index: 10;
+            color: rgba(255, 157, 0, 0.7); font-size: 11px; letter-spacing: 1px; user-select: none;
+        }
 
-        /* MENÚ OSD */
+        #sintonia { text-align: center; color: var(--accent); z-index: 5; text-shadow: 0 0 15px var(--glow); transition: 0.5s; }
+        .flash-sintonia { position: absolute; inset: 0; background: rgba(255,255,255,0.8); z-index: 15; pointer-events: none; animation: flash 0.4s ease-out; }
+        @keyframes flash { 0% { opacity: 0.8; } 100% { opacity: 0; } }
+
         #osd-menu {
             position: absolute; bottom: 100%; left: 50%; transform: translateX(-50%) scaleY(0);
-            transform-origin: bottom center; width: 280px; background: var(--menu-bg);
-            border: 1px solid rgba(255, 157, 0, 0.3); border-radius: 15px; padding: 0; z-index: 25; 
-            display: flex; flex-direction: column; justify-content: center; gap: 8px;
-            box-shadow: 0 -10px 40px rgba(0,0,0,0.8); opacity: 0; transition: all 0.3s ease;
+            transform-origin: bottom center; width: 280px; height: 0; background: var(--menu-bg);
+            backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); border: 1px solid rgba(119, 214, 255, 0.4);
+            border-radius: 20px; padding: 0 30px; z-index: 25; display: flex; flex-direction: column;
+            justify-content: center; gap: 10px; box-shadow: 0 -10px 40px rgba(0,0,0,0.6); opacity: 0;
+            transition: all 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55); overflow: hidden;
         }
-        #osd-menu.activo { padding: 15px; opacity: 1; transform: translateX(-50%) scaleY(1); }
+        #osd-menu.activo { height: auto; padding: 20px 30px; opacity: 1; transform: translateX(-50%) scaleY(1); }
 
         .osd-opcion {
-            background: rgba(255, 255, 255, 0.05); color: #fff; font-size: 14px;
-            padding: 10px; border-radius: 6px; text-align: center; cursor: pointer;
-            transition: 0.2s; border: 1px solid rgba(255,255,255,0.05);
+            background: rgba(255, 255, 255, 0.3); color: var(--menu-text); font-weight: 800; font-size: 16px;
+            padding: 10px 30px; border-radius: 8px; text-align: center; cursor: pointer; border: 1px solid rgba(0, 26, 51, 0.1);
+            transition: 0.2s; user-select: none; letter-spacing: 1px;
         }
-        .osd-opcion:hover { background: var(--accent); color: #000; font-weight: bold; }
+        .osd-opcion:hover, .osd-opcion:active { background: rgba(119, 214, 255, 0.6); transform: scale(1.05); }
 
-        /* CONTROL REMOTO */
-        #cntrl-box { position: absolute; bottom: 12%; left: 50%; transform: translateX(-50%); z-index: 20; perspective: 800px; }
-        #cntrl-box.retirado { transform: translate(250px, 150px) scale(0.65); opacity: 0.5; }
-        #cntrl-box.retirado:hover { opacity: 1; }
+        #cntrl-box {
+            position: absolute; bottom: 15%; left: 50%; transform: translateX(-50%); z-index: 20;
+            perspective: 800px; transition: all 0.8s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+        }
+        #cntrl-box.retirado { transform: translate(250px, 150px) scale(0.6) rotateX(20deg); opacity: 0.7; }
+        #cntrl-box.retirado:hover { opacity: 1; transform: translate(250px, 150px) scale(0.65) rotateX(20deg); }
 
         #control {
-            width: 130px; height: 160px; background: linear-gradient(180deg, #222, #050505);
-            border-radius: 18px; border: 1px solid #333; cursor: pointer; display: flex; flex-direction: column;
-            align-items: center; justify-content: space-around; padding: 15px 0;
-            transform: rotateX(30deg); box-shadow: 0 20px 40px rgba(0,0,0,0.8);
+            width: 140px; height: 180px; background: linear-gradient(180deg, #1a1a1a 0%, #000 100%);
+            border-radius: 20px; border: 1px solid #2a2a2a; cursor: pointer; display: flex; flex-direction: column;
+            align-items: center; justify-content: flex-start; padding-top: 20px; position: relative;
+            transform: rotateX(35deg); box-shadow: 0 25px 50px rgba(0,0,0,0.9), inset 0 2px 4px rgba(255,255,255,0.1), inset 0 -2px 4px rgba(0,0,0,0.8);
+            transition: 0.2s;
         }
+        #control::before {
+            content: ''; position: absolute; top: 5%; left: 15%; right: 15%; height: 25%;
+            background: linear-gradient(180deg, rgba(255,255,255,0.12) 0%, transparent 100%); border-radius: 15px 15px 0 0; pointer-events: none;
+        }
+        #control:active { transform: rotateX(40deg) translateY(3px); box-shadow: 0 15px 30px rgba(0,0,0,0.95); }
 
         .btn-remoto {
-            width: 45px; height: 45px; border-radius: 50%;
-            background: #111; border: 2px solid #333; display: flex; align-items: center;
-            justify-content: center; color: #fff; font-weight: bold; font-size: 11px;
+            width: 50px; height: 50px; border-radius: 50%; margin: 10px 0;
+            background: radial-gradient(circle at 30% 30%, #2a2a2a 0%, #0a0a0a 100%);
+            border: 2px solid #3a3a3a; display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.7), inset 0 2px 4px rgba(255,255,255,0.1);
+            font-weight: bold; font-size: 12px; transition: 0.1s; user-select: none; outline: none;
         }
-        #btn-power { background: #500; border-color: #800; color: #ff8c00; }
-        #btn-menu { opacity: 0.5; pointer-events: none; }
-        .tv-on #btn-menu { opacity: 1; pointer-events: all; border-color: var(--accent); color: var(--accent); }
+        .btn-remoto:active { transform: scale(0.95); background: #0a0a0a; }
 
-        #luz { position: absolute; top: 12px; right: 12px; width: 8px; height: 8px; border-radius: 50%; background: #300; }
-        .encendido #luz { background: #f00; box-shadow: 0 0 10px #f00; }
+        #btn-power { border-color: #4a4a4a; margin-top: 15px; color: #888; font-size: 10px; position: relative; }
+        #btn-power::before { content: ''; width: 20px; height: 20px; border: 3px solid #888; border-top: none; border-radius: 50%; position: absolute; }
+        #btn-power::after { content: ''; width: 3px; height: 12px; background: #888; position: absolute; top: 12px; left: 21px; }
 
-        /* PANTALLA REPRODUCTOR */
-        .pantalla { width: 100%; height: 100%; display: none; background: #000; }
-        .video-layer { width: 100%; height: 100%; object-fit: contain; }
-        .web-layer { width: 100%; height: 100%; border: none; display: none; }
+        #btn-menu { border-color: #3a3a3a; opacity: 0.3; pointer-events: none; color: #555; font-size: 11px; }
+        .tv-on #btn-menu { opacity: 1; pointer-events: all; border-color: #00ff41; color: #00ff41; text-shadow: 0 0 8px #00ff41; }
+
+		.btn-vol {
+		width: 35px !important;
+		height: 35px !important;
+		font-size: 14px !important;
+		margin: 0 !important;
+		opacity: 0;
+		pointer-events: none;
+		transition: opacity 0.3s;
+		}
+		.tv-on .btn-vol {
+		opacity: 1;
+		pointer-events: all;
+		border-color: #ff9d00;
+		cursor: pointer;
+		}
+        #luz { position: absolute; top: 15px; right: 15px; width: 8px; height: 8px; border-radius: 50%; background: #300; box-shadow: inset 0 1px 2px rgba(0,0,0,0.5); transition: 0.3s; }
+        .encendido #luz { background: #f00; box-shadow: 0 0 12px #f00, inset 0 1px 2px rgba(255,255,255,0.3); animation: pulse 2s ease-in-out infinite; }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.6; } }
+
+        .pantalla { width: 100%; height: 100%; overflow: hidden; position: relative; background: #000; display: none; }
+        
+        .video-layer {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            object-fit: contain; transition: opacity 0.6s ease-in-out; z-index: 1; background: #000;
+        }
+        .video-layer.activa { z-index: 2; opacity: 1; }
+        .video-layer.inactiva { z-index: 1; opacity: 0; }
+        
+        .web-layer {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            border: none; transform: scale(1.05); z-index: 2; background: #000;
+        }
+
+        #pantalla-fuera-aire {
+            display: none; position: absolute; inset: 0; 
+            background: radial-gradient(circle at center, #4a2800 0%, #1a0e00 100%); 
+            z-index: 200; flex-direction: column; align-items: center; justify-content: center; 
+            text-align: center; padding: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .web-layer { transform: scale(1.0); }
+            #cntrl-box.retirado { transform: translate(0, 120px) scale(0.7); bottom: 5%; }
+        }
     </style>
 </head>
 <body>
@@ -94,154 +170,468 @@
         <div id="marco-tv">
             <div id="en-vivo"><div class="punto-rojo"></div> EN VIVO</div>
             <div id="logo-estacion">@LaClaraTV</div>
+            <div id="reloj-en-vivo">00:00:00</div>
             <div id="osd-titulo"></div>
+			<div id="osd-volumen" style="
+				position: absolute;
+				bottom: 55px;
+				right: 60px;
+				z-index: 15;
+				background: rgba(0,0,0,0.7);
+				padding: 6px 12px;
+				border-radius: 8px;
+				display: flex;
+				align-items: center;
+				gap: 8px;
+				opacity: 0;
+				transition: opacity 0.4s;
+				pointer-events: none;
+			">
+    <span style="color:#ff9d00; font-size:14px;">🔊</span>
+    <div style="width:100px; height:6px; background:#333; border-radius:3px; overflow:hidden;">
+        <div id="barra-vol" style="width:100%; height:100%; background:#ff9d00; border-radius:3px; transition: width 0.2s;"></div>
+    </div>
+    <span id="txt-vol" style="color:#fff; font-size:12px; font-family:monospace; min-width:35px;">100%</span>
+</div>
+            <div id="estado-cargando"></div>
 
             <div id="sintonia">
-                <h1 style="font-size: 32px; margin: 0; letter-spacing: 2px;">@LaClaraTV</h1>
-                <p style="opacity: 0.6; font-size: 14px;">PRESIONA ENCENDER EN EL CONTROL</p>
+                <h1 style="font-size: 32px; margin: 0;">SEÑAL EN ESPERA</h1>
+                <p style="opacity: 0.6; font-size: 14px;">PRESIONA EL CONTROL</p>
             </div>
             
             <div class="pantalla" id="pantalla-video">
-                <video id="reproductor" class="video-layer" playsinline controls></video>
-                <iframe id="web-frame" class="web-layer" allow="autoplay; fullscreen"></iframe>
+                <video id="video-layer-1" class="video-layer" playsinline></video>
+                <video id="video-layer-2" class="video-layer inactiva" playsinline></video>
+                <iframe id="web-frame" class="web-layer" style="display: none;" allow="autoplay; fullscreen"></iframe>
             </div>
         </div>
 
         <div id="cntrl-box">
             <div id="osd-menu">
-                <div class="osd-opcion" onclick="cambiarCanal('zapping')">📺 ZAPPING</div>
-                <div class="osd-opcion" onclick="cambiarCanal('misterio')">🔍 MISTERIO</div>
-                <div class="osd-opcion" onclick="cambiarCanal('historia')">📜 HISTORIA</div>
-                <div class="osd-opcion" onclick="cambiarCanal('ciencia')">🧪 CIENCIA</div>
-                <div class="osd-opcion" onclick="cambiarCanal('espiritualidad')">🕉️ ESPIRITUALIDAD</div>
-                <div class="osd-opcion" onclick="cambiarCanal('viernes')">🔮 VIERNES MÍSTICOS</div>
-                <div class="osd-opcion" onclick="cambiarCanal('universo')">🌀 UNIVERSO 2° ANILLO</div>
+                <div id="menu-dinamico"></div>
             </div>
 
             <div id="control">
-                <div id="luz"></div>
-                <div class="btn-remoto" id="btn-power" onclick="prenderTV()" title="Encender">ON</div>
-                <div class="btn-remoto" id="btn-menu" onclick="abrirMenu(event)" title="Menú">MENU</div>
-            </div>
-        </div>
+    <div id="luz"></div>
+    <div class="btn-remoto" id="btn-power" onclick="toggleTV(event)"></div>
+    <div class="btn-remoto" id="btn-menu" onclick="abrirMenu(event)">MENU</div>
+    <div style="display:flex; gap:6px; margin-top:5px;">
+    <div class="btn-remoto btn-vol" onclick="cambiarVolumen(-0.1)">🔉</div>
+    <div class="btn-remoto btn-vol" onclick="cambiarVolumen(0.1)">🔊</div>
+			</div>
+	</div>
+    </div>
+
+    <div id="pantalla-fuera-aire">
+        <div style="font-size: 4rem; margin-bottom: 20px;">📺</div>
+        <h1 style="color: #ff9d00; font-size: 2rem; margin: 0; font-weight: 700;">@LaClaraTV</h1>
+        <p style="color: #fff; font-size: 1.3rem; margin: 20px 0; font-weight: 300;">Momentáneamente fuera de aire.</p>
+        <p style="color: #ccc; font-size: 1rem; margin-bottom: 10px;">Dirígete a nuestro canal en vivo:</p>
+        <a href="https://youtube.com/@laclara" target="_blank" style="background: #ff0000; color: #fff; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: bold; font-size: 1.1rem; display: inline-flex; align-items: center; gap: 8px; transition: 0.3s;">
+            <span>▶</span> youtube.com/@laclara
+        </a>
+        <p style="color: #666; margin-top: 40px; font-size: 0.9rem;">¡Vuelve más tarde!</p>
     </div>
 
     <script>
-        // BIBLIOTECA RESPALDO (Directa, sin APIs raras)
         const bibliotecaDefault = [
-            { id: "bamper-central-1", titulo: "Bumper Central 1", bloque: "bumper", tipo: "archive" },
-            { id: "bamper-2", titulo: "Bumper Central 2", bloque: "bumper", tipo: "archive" },
-            { id: "las-fallas-de-la-arqueologia", titulo: "Las Fallas De La Arqueologia", bloque: "ciencia", tipo: "archive" },
-            { id: "astronomia-vieja-impostora", titulo: "Astronomia Vieja Impostora", bloque: "ciencia", tipo: "archive" },
-            { id: "antartida-la-tierra-prohibida-aportes-la-claraboya", titulo: "Antartida La Tierra Prohibida", bloque: "ciencia", tipo: "archive" },
-            { id: "la-rueda-de-samsara", titulo: "La Rueda de Samsara", bloque: "espiritualidad", tipo: "archive" },
-            { id: "TheSecretLandHighJump194769min", titulo: "Operacion Highjump (Secret Land)", bloque: "misterio", tipo: "archive" },
-            { id: "Pre-Columbian_Trans-Oceanic_Contact", titulo: "Contacto Transoceanico Precolombino", bloque: "historia", tipo: "archive" },
+            { id: "bamper-central-1", titulo: "Bumper Central 1", bloque: "bumper", peso: 12, tipo: "archive", duracion: 15000 },
+            { id: "bamper-2", titulo: "Bumper Central 2", bloque: "bumper", peso: 12, tipo: "archive", duracion: 15000 },
+            { id: "bamper-3", titulo: "Bumper Central 3", bloque: "bumper", peso: 12, tipo: "archive", duracion: 15000 },
+            { id: "las-fallas-de-la-arqueologia", titulo: "Las Fallas De La Arqueologia", bloque: "ciencia", peso: 12, tipo: "archive" },
+            { id: "astronomia-vieja-impostora", titulo: "Astronomia Vieja Impostora", bloque: "ciencia", peso: 12, tipo: "archive" },
+            { id: "antartida-la-tierra-prohibida-aportes-la-claraboya", titulo: "Antartida La Tierra Prohibida Aportes La Claraboya", bloque: "ciencia", peso: 12, tipo: "archive" },
+            { id: "la-rueda-de-samsara", titulo: "La Rueda de Samsara", bloque: "espiritualidad", peso: 12, tipo: "archive" },
+            { id: "TheSecretLandHighJump194769min", titulo: "The Secret Land (Operacion Highjump)", bloque: "misterio", peso: 9, tipo: "archive" },
+            { id: "Pre-Columbian_Trans-Oceanic_Contact", titulo: "Contacto Transoceanico Precolombino", bloque: "historia", peso: 9, tipo: "archive" },
+            { id: "ovni-miguel-pedrero", titulo: "OVNI: Una Explicacion que no va a Gustar a Nadie", bloque: "misterio", peso: 9, tipo: "archive" },
+            { id: "energia-libre-carrera-hacia-el-punto-cero", titulo: "Energia Libre: Carrera Hacia el Punto Cero", bloque: "ciencia", peso: 9, tipo: "archive" },
+            { id: "DocumentalELSECRETOLALEYDELAATRACCIONTheSecretEspanol", titulo: "El Secreto: La Ley de la Atraccion", bloque: "espiritualidad", peso: 9, tipo: "archive" },
             { id: "viernes", titulo: "Viernes Misticos", bloque: "externo", url: "https://aldosuarez10.github.io/viernes-misticos-radio/", tipo: "web" },
             { id: "universo", titulo: "Universo 2 Anillo", bloque: "externo", url: "https://aldosuarez10.github.io/universo_segundo_anillo/", tipo: "web" }
         ];
 
         let biblioteca = [...bibliotecaDefault];
         let tvEncendida = false;
+        let colaBumpers = [];
         let ultimoIdMostrado = null;
-        let canalActual = 'zapping';
+        let timerAvance = null;
+        let capaActiva = 1;
+        let bloqueActual = null;
 
-        // CARGAR PLAYLIST SI EXISTE
+        function mostrarFueraDeAire() {
+            document.getElementById('pantalla-fuera-aire').style.display = 'flex';
+            document.getElementById('marco-tv').style.display = 'none';
+            document.getElementById('cntrl-box').style.display = 'none';
+        }
+
         async function cargarPlaylist() {
             try {
                 const res = await fetch('playlist.json');
-                if (res.ok) {
-                    const data = await res.json();
-                    const itemsJson = data.filter(item => item.id && item.bloque);
-                    if (itemsJson.length > 0) {
-                        // Unimos el default con el JSON para no perder nada
-                        biblioteca = [...itemsJson, ...bibliotecaDefault.filter(d => !itemsJson.some(j => j.id === d.id))];
-                        console.log("✅ Playlist unificada con éxito.");
-                    }
-                }
-            } catch (e) {
-                console.log("Usando biblioteca local.");
+                if (!res.ok) throw new Error('No se encontró la programación');
+                const data = await res.json();
+                biblioteca = data.filter(item => item.id && item.bloque);
+                console.log(`✅ Playlist.json cargada: ${biblioteca.length} items.`);
+                validarBiblioteca(); 
+            } catch (error) {
+                console.warn("No se pudo cargar playlist.json, usando biblioteca por defecto.", error);
+                validarBiblioteca();
             }
         }
 
-        function prenderTV() {
+        async function validarBiblioteca() {
+            const estado = document.getElementById('estado-cargando');
+            const cacheKey = 'laclara_tv_validacion_v5';
+            const cache = JSON.parse(localStorage.getItem(cacheKey));
+            const ahora = Date.now();
+
+            if (cache && (ahora - cache.timestamp < 86400000)) {
+                biblioteca = cache.bibliotecaValida;
+                console.log("✅ Señal restaurada desde caché");
+                return;
+            }
+
+            if (estado) estado.textContent = 'VERIFICANDO SEÑAL...';
+            const itemsArchive = biblioteca.filter(v => v.tipo === 'archive');
+            
+            const resultados = await Promise.all(itemsArchive.map(async v => {
+                try {
+                    const res = await fetch(`https://archive.org/metadata/${v.id}`);
+                    if (!res.ok) return null;
+                    const data = await res.json();
+                    if (data && data.metadata && data.metadata.identifier) {
+                        const mp4File = data.files.find(f => f.format === 'MPEG4' || f.name.toLowerCase().endsWith('.mp4'));
+                        if (mp4File) {
+                            v.url_video = `https://archive.org/download/${v.id}/${mp4File.name}`;
+                            return v;
+                        }
+                    }
+                    return null;
+                } catch (e) { return null; }
+            }));
+
+            const itemsValidos = resultados.filter(Boolean);
+            const idsValidos = new Set(itemsValidos.map(v => v.id));
+            
+            for (let i = biblioteca.length - 1; i >= 0; i--) {
+                if (biblioteca[i].tipo === 'archive') {
+                    if (idsValidos.has(biblioteca[i].id)) {
+                        biblioteca[i] = itemsValidos.find(v => v.id === biblioteca[i].id);
+                    } else {
+                        biblioteca.splice(i, 1);
+                    }
+                }
+            }
+
+            localStorage.setItem(cacheKey, JSON.stringify({ timestamp: ahora, bibliotecaValida: biblioteca }));
+            if (estado) estado.textContent = '';
+            
+            if (biblioteca.filter(v => v.tipo === 'archive').length === 0) {
+                mostrarFueraDeAire();
+            }
+        }
+
+        function elegirSiguiente(bloqueDeseado = null) {
+            let candidatos = biblioteca.filter(v => v.tipo === "archive" && (bloqueDeseado ? v.bloque === bloqueDeseado : true));
+            if (candidatos.length > 1) candidatos = candidatos.filter(v => v.id !== ultimoIdMostrado);
+            let pool = [];
+            candidatos.forEach(v => { for (let i = 0; i < (v.peso || 1); i++) pool.push(v); });
+            return pool.length > 0 ? pool[Math.floor(Math.random() * pool.length)] : null;
+        }
+
+        function obtenerRafagaBumpers() {
+            const bumpers = biblioteca.filter(v => v.bloque === "bumper");
+            let rafaga = [];
+            for (let i = 0; i < 3 && i < bumpers.length; i++) rafaga.push(bumpers[Math.floor(Math.random() * bumpers.length)]);
+            return rafaga;
+        }
+
+        function generarMenuOSD() {
+            const menuContainer = document.getElementById('menu-dinamico');
+            const opciones = [
+                { label: "📺 ZAPPING", accion: () => cambiarCanal('zapping') },
+                { label: "🔍 MISTERIO", accion: () => cambiarCanal('misterio') },
+                { label: "📜 HISTORIA", accion: () => cambiarCanal('historia') },
+                { label: "🧪 CIENCIA", accion: () => cambiarCanal('ciencia') },
+                { label: "🕉️ ESPIRITUALIDAD", accion: () => cambiarCanal('espiritualidad') },
+                { label: "🔮 VIERNES MÍSTICOS", accion: () => cambiarCanal('viernes') },
+                { label: "🌀 UNIVERSO 2° ANILLO", accion: () => cambiarCanal('universo') }
+            ];
+            menuContainer.innerHTML = opciones.map(op => `<div class="osd-opcion" onclick="ejecutarAccionMenu(this)">${op.label}</div>`).join('');
+            window.opcionesMenu = opciones;
+        }
+
+        function ejecutarAccionMenu(elemento) {
+            const index = Array.from(elemento.parentNode.children).indexOf(elemento);
+            window.opcionesMenu[index].accion();
+        }
+		function toggleTV(e) {
+		if (e) e.stopPropagation();
+		if (tvEncendida) {
+        apagarTV();
+		} else {
+        encenderTV(e);
+    }
+}
+
+function apagarTV() {
+    tvEncendida = false;
+    document.getElementById('cntrl-box').classList.remove('retirado', 'encendido');
+    document.getElementById('control').classList.remove('tv-on');
+    document.getElementById('en-vivo').style.display = 'none';
+    document.getElementById('pantalla-video').style.display = 'none';
+    document.getElementById('sintonia').style.display = 'block';
+    document.getElementById('osd-menu').classList.remove('activo');
+
+    var layer1 = document.getElementById('video-layer-1');
+    var layer2 = document.getElementById('video-layer-2');
+    var webFrame = document.getElementById('web-frame');
+
+    if (layer1) { layer1.pause(); layer1.removeAttribute('src'); }
+    if (layer2) { layer2.pause(); layer2.removeAttribute('src'); }
+    if (webFrame) { webFrame.src = 'about:blank'; }
+}
+
+	function cambiarVolumen(delta) {
+    var layer1 = document.getElementById('video-layer-1');
+    var layer2 = document.getElementById('video-layer-2');
+
+    [layer1, layer2].forEach(function(v) {
+        if (v) {
+            var nuevoVol = Math.min(1, Math.max(0, v.volume + delta));
+            v.volume = nuevoVol;
+        }
+    });
+
+    // Mostrar barrita visual
+    var vol = layer1 ? layer1.volume : (layer2 ? layer2.volume : 1);
+    var porcentaje = Math.round(vol * 100);
+    document.getElementById('barra-vol').style.width = porcentaje + '%';
+    document.getElementById('txt-vol').textContent = porcentaje + '%';
+
+    var osd = document.getElementById('osd-volumen');
+    osd.style.opacity = '1';
+
+    // Ocultar la barrita después de 2 segundos
+    clearTimeout(window.volTimer);
+    window.volTimer = setTimeout(function() {
+        osd.style.opacity = '0';
+    }, 2000);
+}
+        function encenderTV(e) {
+            if (e) e.stopPropagation();
             if (tvEncendida) return;
             tvEncendida = true;
 
             document.getElementById('cntrl-box').classList.add('retirado', 'encendido');
             document.getElementById('control').classList.add('tv-on');
             document.getElementById('en-vivo').style.display = 'flex';
-            document.getElementById('sintonia').style.display = 'none';
-            document.getElementById('pantalla-video').style.display = 'block';
             
-            cambiarCanal('zapping');
+            setTimeout(() => {
+                document.getElementById('sintonia').style.display = 'none';
+                document.getElementById('pantalla-video').style.display = 'block';
+                cambiarCanal('zapping');
+            }, 500);
         }
 
         function abrirMenu(e) {
-            e.stopPropagation();
+            if (e) e.stopPropagation();
             if (!tvEncendida) return;
             document.getElementById('osd-menu').classList.toggle('activo');
         }
 
         function cambiarCanal(bloque) {
+            if (!tvEncendida) return;
             document.getElementById('osd-menu').classList.remove('activo');
-            canalActual = bloque;
+            clearTimeout(timerAvance);
+            bloqueActual = bloque;
 
             if (bloque === 'viernes' || bloque === 'universo') {
-                const ext = biblioteca.find(v => v.id === bloque);
-                if (ext) mostrarEnPantalla(ext);
+                const canal = biblioteca.find(v => v.id === bloque);
+                if (canal) mostrarEnPantalla(canal);
+            } else if (bloque === 'zapping') {
+                colaBumpers = obtenerRafagaBumpers();
+                reproducirSiguienteEnCola();
             } else {
-                let candidatos = biblioteca.filter(v => v.tipo === "archive" && (bloque === 'zapping' ? true : v.bloque === bloque));
-                if (candidatos.length === 0) candidatos = biblioteca.filter(v => v.bloque === 'bumper');
-                
-                const elegido = candidatos[Math.floor(Math.random() * candidatos.length)];
-                mostrarEnPantalla(elegido);
+                reproducirBloqueFijo(bloque);
             }
         }
 
-        function mostrarEnPantalla(item) {
+        function reproducirBloqueFijo(bloque) {
+            const video = elegirSiguiente(bloque);
+            if (!video) { cambiarCanal('zapping'); return; }
+            mostrarEnPantalla(video);
+        }
+
+        function reproducirSiguienteEnCola() {
+            if (colaBumpers.length > 0) {
+                const bumper = colaBumpers.shift();
+                mostrarEnPantalla(bumper);
+            } else {
+                const video = elegirSiguiente();
+                if (!video) return;
+                mostrarEnPantalla(video);
+            }
+        }
+
+        function mostrarEnPantalla(item, offsetSegundos = 0) {
             ultimoIdMostrado = item.id;
             
-            // OSD de Título
-            const osd = document.getElementById('osd-titulo');
-            osd.textContent = item.titulo;
-            osd.classList.add('visible');
-            setTimeout(() => osd.classList.remove('visible'), 5000);
+            const flash = document.createElement('div');
+            flash.className = 'flash-sintonia';
+            document.getElementById('marco-tv').appendChild(flash);
+            setTimeout(() => flash.remove(), 400);
 
-            const reproductor = document.getElementById('reproductor');
+            const osdTitulo = document.getElementById('osd-titulo');
+            osdTitulo.textContent = item.titulo;
+            osdTitulo.classList.add('visible');
+            setTimeout(() => osdTitulo.classList.remove('visible'), 8000);
+
+            const layer1 = document.getElementById('video-layer-1');
+            const layer2 = document.getElementById('video-layer-2');
             const webFrame = document.getElementById('web-frame');
 
             if (item.tipo === 'web') {
-                reproductor.pause();
-                reproductor.style.display = 'none';
+                layer1.pause(); layer1.removeAttribute('src'); layer1.load();
+                layer2.pause(); layer2.removeAttribute('src'); layer2.load();
+                
+                layer1.style.display = 'none';
+                layer2.style.display = 'none';
                 webFrame.style.display = 'block';
                 webFrame.src = item.url;
-            } else {
-                webFrame.src = 'about:blank';
-                webFrame.style.display = 'none';
-                reproductor.style.display = 'block';
-                
-                // ARMA EL LINK DIRECTO (El viejo confiable)
-                reproductor.src = `https://archive.org/download/${item.id}/${item.id}.mp4`;
-                reproductor.play().catch(e => console.log("Click play manual requerido"));
+                return;
+            }
+
+            webFrame.src = 'about:blank';
+            webFrame.style.display = 'none';
+            layer1.style.display = 'block';
+            layer2.style.display = 'block';
+
+            if (item.url_video) {
+                cambiarCapaVideo(item.url_video, offsetSegundos, item);
             }
         }
 
-        // AL TERMINAR UN VIDEO, PASAR AL SIGUIENTE AUTOMÁTICAMENTE
-        document.getElementById('reproductor').addEventListener('ended', function() {
+        function cambiarCapaVideo(url, offset, item) {
+            const layer1 = document.getElementById('video-layer-1');
+            const layer2 = document.getElementById('video-layer-2');
+            
+            const capaVieja = capaActiva === 1 ? layer1 : layer2;
+            const capaNueva = capaActiva === 1 ? layer2 : layer1;
+
+            capaVieja.pause();
+            capaNueva.src = url;
+            
+            if (offset > 0) {
+                capaNueva.dataset.targetOffset = offset;
+                capaNueva.dataset.randomStart = 'false';
+            } else {
+                capaNueva.dataset.randomStart = 'true';
+            }
+
+            let playPromise = capaNueva.play();
+            if (playPromise !== undefined) {
+                playPromise.catch(error => {
+                    console.warn("Autoplay bloqueado:", error);
+                });
+            }
+
+            capaNueva.classList.add('activa');
+            capaNueva.classList.remove('inactiva');
+            capaVieja.classList.add('inactiva');
+            capaVieja.classList.remove('activa');
+            
+            capaActiva = capaActiva === 1 ? 2 : 1;
+        }
+
+        const eventosProgramados = [];
+        let eventoActivoId = null;
+
+        function verificarEventoProgramado() {
             if (!tvEncendida) return;
-            cambiarCanal(canalActual);
+            const ahora = new Date();
+            const evento = eventosProgramados.find(e => ahora >= new Date(e.inicio) && ahora < new Date(e.fin));
+
+            if (evento && evento.id !== eventoActivoId) {
+                eventoActivoId = evento.id;
+                clearTimeout(timerAvance);
+                const offsetSegundos = Math.max(0, Math.floor((ahora - new Date(evento.inicio)) / 1000));
+                mostrarEnPantalla(evento, offsetSegundos);
+            } else if (!evento && eventoActivoId !== null) {
+                eventoActivoId = null;
+                cambiarCanal('zapping');
+            }
+        }
+        setInterval(verificarEventoProgramado, 15000);
+
+        function actualizarReloj() {
+            const ahora = new Date();
+            const h = String(ahora.getHours()).padStart(2, '0');
+            const m = String(ahora.getMinutes()).padStart(2, '0');
+            const s = String(ahora.getSeconds()).padStart(2, '0');
+            document.getElementById('reloj-en-vivo').textContent = `${h}:${m}:${s}`;
+        }
+        setInterval(actualizarReloj, 1000);
+        actualizarReloj();
+
+        document.getElementById('marco-tv').addEventListener('click', function(e) {
+            if (!tvEncendida) return;
+            if (e.target.closest('#osd-menu') || e.target.closest('#control')) return;
+            
+            const activeLayer = capaActiva === 1 ? document.getElementById('video-layer-1') : document.getElementById('video-layer-2');
+            if (activeLayer.paused) {
+                activeLayer.play();
+            } else {
+                activeLayer.pause();
+            }
         });
 
-        // Cerrar menú al hacer clic afuera
+        // CUANDO UN VIDEO TERMINA, PASAR AL SIGUIENTE
+        document.querySelectorAll('.video-layer').forEach(layer => {
+            layer.addEventListener('loadedmetadata', function() {
+                if (this.dataset.randomStart === 'true') {
+                    // Solo arrancar empezado si dura más de 20 minutos
+                    if (this.duration > 1200) {
+                        let target = Math.floor(Math.random() * 300) + 120;
+                        this.currentTime = (this.duration < target) ? Math.max(0, this.duration - 30) : target;
+                    } else {
+                        this.currentTime = 0;
+                    }
+                    delete this.dataset.randomStart;
+                } else if (this.dataset.targetOffset) {
+                    let target = parseFloat(this.dataset.targetOffset);
+                    this.currentTime = (this.duration && this.duration < target) ? Math.max(0, this.duration - 30) : target;
+                    delete this.dataset.targetOffset;
+                }
+            });
+
+            // EVENTO CLAVE: Cuando el video termina naturalmente
+            layer.addEventListener('ended', function() {
+                if (!tvEncendida) return;
+                
+                // Si estábamos en modo zapping con bumpers
+                if (colaBumpers.length > 0) {
+                    reproducirSiguienteEnCola();
+                } else if (bloqueActual && bloqueActual !== 'zapping') {
+                    // Si estábamos en una categoría específica
+                    reproducirBloqueFijo(bloqueActual);
+                } else {
+                    // Si estábamos en zapping general
+                    reproducirSiguienteEnCola();
+                }
+            });
+        });
+
         document.addEventListener('click', function (e) {
             const menu = document.getElementById('osd-menu');
-            const btn = document.getElementById('btn-menu');
-            if (menu.classList.contains('activo') && !menu.contains(e.target) && e.target !== btn) {
+            const btnMenu = document.getElementById('btn-menu');
+            if (menu.classList.contains('activo') && !menu.contains(e.target) && e.target !== btnMenu) {
                 menu.classList.remove('activo');
             }
         });
 
+        generarMenuOSD();
         cargarPlaylist();
     </script>
 </body>
