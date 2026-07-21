@@ -259,6 +259,7 @@
         let timerAvance = null;
         let capaActiva = 1;
         let bloqueActual = null;
+		let bibliotecaLista = false;
 
         function mostrarFueraDeAire() {
             document.getElementById('pantalla-fuera-aire').style.display = 'flex';
@@ -287,10 +288,11 @@
             const ahora = Date.now();
 
             if (cache && (ahora - cache.timestamp < 86400000)) {
-                biblioteca = cache.bibliotecaValida;
-                console.log("✅ Señal restaurada desde caché");
-                return;
-            }
+			biblioteca = cache.bibliotecaValida;
+			bibliotecaLista = true;
+			console.log("✅ Señal restaurada desde caché");
+			return;
+		}
 
             if (estado) estado.textContent = 'VERIFICANDO SEÑAL...';
             const itemsArchive = biblioteca.filter(v => v.tipo === 'archive');
@@ -325,11 +327,12 @@
             }
 
             localStorage.setItem(cacheKey, JSON.stringify({ timestamp: ahora, bibliotecaValida: biblioteca }));
-            if (estado) estado.textContent = '';
-            
-            if (biblioteca.filter(v => v.tipo === 'archive').length === 0) {
-                mostrarFueraDeAire();
-            }
+			bibliotecaLista = true;
+			if (estado) estado.textContent = '';
+
+			if (biblioteca.filter(v => v.tipo === 'archive').length === 0) {
+			mostrarFueraDeAire();
+			}
         }
 
         function elegirSiguiente(bloqueDeseado = null) {
@@ -419,7 +422,19 @@ function apagarTV() {
         osd.style.opacity = '0';
     }, 2000);
 }
-        function encenderTV(e) {
+        function arrancarCuandoEsteLista() {
+    const estado = document.getElementById('estado-cargando');
+
+    if (bibliotecaLista) {
+        if (estado) estado.textContent = '';
+        cambiarCanal('zapping');
+    } else {
+        if (estado) estado.textContent = 'CARGANDO SEÑAL...';
+        setTimeout(arrancarCuandoEsteLista, 700);
+    }
+}
+		
+		function encenderTV(e) {
             if (e) e.stopPropagation();
             if (tvEncendida) return;
             tvEncendida = true;
@@ -429,10 +444,10 @@ function apagarTV() {
             document.getElementById('en-vivo').style.display = 'flex';
             
             setTimeout(() => {
-                document.getElementById('sintonia').style.display = 'none';
-                document.getElementById('pantalla-video').style.display = 'block';
-                cambiarCanal('zapping');
-            }, 500);
+			document.getElementById('sintonia').style.display = 'none';
+			document.getElementById('pantalla-video').style.display = 'block';
+			arrancarCuandoEsteLista();
+			}, 500);
         }
 
         function abrirMenu(e) {
