@@ -29,6 +29,14 @@
             background-size: 200% 200%; -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
             animation: tornasol 8s ease-in-out infinite; z-index: 10; user-select: none;
         }
+		#contador-viewers {
+            position: absolute; top: 55px; right: 35px; z-index: 10;
+            color: rgba(255, 255, 255, 0.7); font-size: 13px; font-weight: 600;
+            display: flex; align-items: center; gap: 5px;
+            text-shadow: 0 0 5px rgba(0,0,0,0.8); user-select: none;
+            opacity: 0; transition: opacity 0.5s;
+        }
+        .tv-on #contador-viewers { opacity: 1; }
         @keyframes tornasol { 0%, 100% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } }
 
         #en-vivo {
@@ -40,22 +48,21 @@
         @keyframes parpadeo { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
 
         #reloj-en-vivo {
-			position: absolute; bottom: 25px; left: 35px; z-index: 10;
-			color: rgba(255, 255, 255, 0.9); font-family: 'Courier New', monospace;
-			font-size: 22px; font-weight: 900; letter-spacing: 3px;
-			text-shadow: 0 0 8px rgba(0,0,0,1), 2px 2px 4px rgba(0,0,0,0.8); user-select: none;
-		}
+            position: absolute; bottom: 25px; left: 35px; z-index: 10;
+            color: rgba(255, 255, 255, 0.8); font-family: 'Courier New', monospace;
+            font-size: 16px; font-weight: bold; letter-spacing: 2px;
+            text-shadow: 0 0 5px rgba(0,0,0,0.9); user-select: none;
+        }
 
         #osd-titulo {
-			position: absolute; bottom: 60px; left: 35px; z-index: 15;
-			background: rgba(0,0,0,0.85); color: #fff; padding: 12px 22px;
-			border-left: 5px solid var(--accent); border-radius: 0 6px 6px 0;
-			font-size: 18px; font-weight: 800; letter-spacing: 0.8px;
-			opacity: 0; transform: translateX(-20px);
-			transition: all 0.4s ease-out; pointer-events: none;
-			max-width: 70%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-			text-shadow: 1px 1px 3px rgba(0,0,0,0.9);
-		}
+            position: absolute; bottom: 60px; left: 35px; z-index: 15;
+            background: rgba(0,0,0,0.85); color: #fff; padding: 10px 18px;
+            border-left: 4px solid var(--accent); border-radius: 0 6px 6px 0;
+            font-size: 15px; font-weight: 600; letter-spacing: 0.5px;
+            opacity: 0; transform: translateX(-20px);
+            transition: all 0.4s ease-out; pointer-events: none;
+            max-width: 65%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+        }
         #osd-titulo.visible { opacity: 1; transform: translateX(0); }
 
         #estado-cargando {
@@ -88,8 +95,8 @@
             position: absolute; bottom: 15%; left: 50%; transform: translateX(-50%); z-index: 20;
             perspective: 800px; transition: all 0.8s cubic-bezier(0.68, -0.55, 0.27, 1.55);
         }
-        #cntrl-box.retirado { transform: translate(330px, 120px) scale(0.6) rotateX(20deg); opacity: 0.7; }
-		#cntrl-box.retirado:hover { opacity: 1; transform: translate(330px, 120px) scale(0.65) rotateX(20deg); }
+        #cntrl-box.retirado { transform: translate(250px, 150px) scale(0.6) rotateX(20deg); opacity: 0.7; }
+        #cntrl-box.retirado:hover { opacity: 1; transform: translate(250px, 150px) scale(0.65) rotateX(20deg); }
 
         #control {
             width: 140px; height: 180px; background: linear-gradient(180deg, #1a1a1a 0%, #000 100%);
@@ -171,6 +178,7 @@
         <div id="marco-tv">
             <div id="en-vivo"><div class="punto-rojo"></div> EN VIVO</div>
             <div id="logo-estacion">@LaClaraTV</div>
+			<div id="contador-viewers">👁 <span id="viewer-count">14</span> en línea</div>
             <div id="reloj-en-vivo">00:00:00</div>
             <div id="osd-titulo"></div>
 			<div id="osd-volumen" style="
@@ -202,6 +210,7 @@
             </div>
             
             <div class="pantalla" id="pantalla-video">
+			<div id="estatica"></div>
                 <video id="video-layer-1" class="video-layer" playsinline></video>
                 <video id="video-layer-2" class="video-layer inactiva" playsinline></video>
                 <iframe id="web-frame" class="web-layer" style="display: none;" allow="autoplay; fullscreen"></iframe>
@@ -256,7 +265,8 @@
         let biblioteca = [...bibliotecaDefault];
         let tvEncendida = false;
         let colaBumpers = [];
-        let ultimoIdMostrado = null;
+        let historialReciente = []; 
+		const MAX_HISTORIAL = 8; // Recordará los últimos 8 videos para no repetir
         let timerAvance = null;
         let capaActiva = 1;
         let bloqueActual = null;
@@ -284,7 +294,7 @@
 
         async function validarBiblioteca() {
             const estado = document.getElementById('estado-cargando');
-            const cacheKey = 'laclara_tv_validacion_v6';
+            const cacheKey = 'laclara_tv_validacion_v5';
             const cache = JSON.parse(localStorage.getItem(cacheKey));
             const ahora = Date.now();
 
@@ -337,26 +347,66 @@
         }
 
         function elegirSiguiente(bloqueDeseado = null) {
-            let candidatos = biblioteca.filter(v => v.tipo === "archive" && (bloqueDeseado ? v.bloque === bloqueDeseado : true));
-            if (candidatos.length > 1) candidatos = candidatos.filter(v => v.id !== ultimoIdMostrado);
-            let pool = [];
-            candidatos.forEach(v => { for (let i = 0; i < (v.peso || 1); i++) pool.push(v); });
-            return pool.length > 0 ? pool[Math.floor(Math.random() * pool.length)] : null;
-        }
+    // 1. Filtrar candidatos válidos
+    let candidatos = biblioteca.filter(v => v.tipo === "archive" && (bloqueDeseado ? v.bloque === bloqueDeseado : true));
+    
+    // 2. Excluir los que ya están en el historial reciente (¡Aquí estaba el error!)
+    if (candidatos.length > 1) {
+        candidatos = candidatos.filter(v => !historialReciente.includes(v.id));
+    }
+    
+    // 3. Si se vació la lista (ya vimos todo), limpiamos el historial para volver a usar todo
+    if (candidatos.length === 0) {
+        historialReciente = [];
+        candidatos = biblioteca.filter(v => v.tipo === "archive" && (bloqueDeseado ? v.bloque === bloqueDeseado : true));
+    }
 
-        function obtenerRafagaBumpers() {
-            const bumpers = biblioteca.filter(v => v.bloque === "bumper");
-            let rafaga = [];
-            for (let i = 0; i < 3 && i < bumpers.length; i++) rafaga.push(bumpers[Math.floor(Math.random() * bumpers.length)]);
-            return rafaga;
+    // 4. Aplicar el sistema de "peso" (los más pesados tienen más chances)
+    let pool = [];
+    candidatos.forEach(v => { for (let i = 0; i < (v.peso || 1); i++) pool.push(v); });
+    
+    // 5. Elegir y guardar en historial
+    if (pool.length > 0) {
+        const elegido = pool[Math.floor(Math.random() * pool.length)];
+        historialReciente.push(elegido.id);
+        if (historialReciente.length > MAX_HISTORIAL) {
+            historialReciente.shift(); // Mantiene solo los últimos 8
         }
+        return elegido;
+    }
+    return null;
+}
+        function obtenerRafagaBumpers() {
+    let bumpers = biblioteca.filter(v => v.bloque === "bumper" && !historialReciente.includes(v.id));
+    
+    // Si ya vimos todos los bumpers, los volvemos a poner en juego
+    if (bumpers.length === 0) {
+        bumpers = biblioteca.filter(v => v.bloque === "bumper");
+    }
+    
+    let rafaga = [];
+    let disponibles = [...bumpers];
+    
+    for (let i = 0; i < 3 && disponibles.length > 0; i++) {
+        const idx = Math.floor(Math.random() * disponibles.length);
+        const elegido = disponibles.splice(idx, 1)[0];
+        rafaga.push(elegido);
+        
+        // Agregar al historial principal para que no se repita pronto
+        historialReciente.push(elegido.id);
+        if (historialReciente.length > MAX_HISTORIAL) {
+            historialReciente.shift();
+        }
+    }
+    return rafaga;
+}
 
         function generarMenuOSD() {
             const menuContainer = document.getElementById('menu-dinamico');
             const opciones = [
                 { label: "📺 ZAPPING", accion: () => cambiarCanal('zapping') },
                 { label: "🔍 MISTERIO", accion: () => cambiarCanal('misterio') },
-                { label: "📜 HISTORIA", accion: () => cambiarCanal('historia') },
+                { label: "📜 GEOPOLÍTICA", accion: () => cambiarCanal('historia') },
                 { label: "🧪 CIENCIA", accion: () => cambiarCanal('ciencia') },
                 { label: "🕉️ ESPIRITUALIDAD", accion: () => cambiarCanal('espiritualidad') },
                 { label: "🔮 VIERNES MÍSTICOS", accion: () => cambiarCanal('viernes') },
@@ -405,6 +455,7 @@ function apagarTV() {
         if (v) {
             var nuevoVol = Math.min(1, Math.max(0, v.volume + delta));
             v.volume = nuevoVol;
+			document.getElementById('contador-viewers').style.opacity = '0';
         }
     });
 
@@ -449,6 +500,7 @@ function apagarTV() {
 			document.getElementById('pantalla-video').style.display = 'block';
 			arrancarCuandoEsteLista();
 			}, 500);
+			document.getElementById('contador-viewers').style.opacity = '1';
         }
 
         function abrirMenu(e) {
@@ -457,21 +509,73 @@ function apagarTV() {
             document.getElementById('osd-menu').classList.toggle('activo');
         }
 
-        function cambiarCanal(bloque) {
-            if (!tvEncendida) return;
-            document.getElementById('osd-menu').classList.remove('activo');
-            clearTimeout(timerAvance);
-            bloqueActual = bloque;
+           function cambiarCanal(bloque) {
+    if (!tvEncendida) return;
+    document.getElementById('osd-menu').classList.remove('activo');
+    clearTimeout(timerAvance);
+    bloqueActual = bloque;
 
-            if (bloque === 'viernes' || bloque === 'universo') {
-                const canal = biblioteca.find(v => v.id === bloque);
-                if (canal) mostrarEnPantalla(canal);
-            } else if (bloque === 'zapping') {
-                colaBumpers = obtenerRafagaBumpers();
-                reproducirSiguienteEnCola();
-            } else {
-                reproducirBloqueFijo(bloque);
+    // 🌐 CANALES EXTERNOS (URLs fijas, no dependen del JSON)
+    if (bloque === 'viernes' || bloque === 'universo') {
+        const urlsExternas = {
+            'viernes': 'https://aldosuarez10.github.io/viernes-misticos-radio/',
+            'universo': 'https://aldosuarez10.github.io/universo_segundo_anillo/'
+        };
+        const itemExterno = {
+            id: bloque,
+            titulo: bloque === 'viernes' ? 'Viernes Místicos' : 'Universo 2° Anillo',
+            tipo: 'web',
+            url: urlsExternas[bloque]
+        };
+        mostrarEnPantalla(itemExterno);
+        return;
+    }
+
+    // 📺 VIDEOS DE ARCHIVE (desde el JSON)
+    const video = elegirSiguiente(bloque === 'zapping' ? null : bloque);
+    if (!video) { 
+        if (bloque !== 'zapping') cambiarCanal('zapping'); 
+        return; 
+    }
+    mostrarEnPantalla(video);
+}
+
+        function elegirSiguiente(bloqueDeseado = null) {
+            // 1. Filtrar: Si no se pide bloque, EXCLUIR bumpers automáticamente
+            let candidatos = biblioteca.filter(v => {
+                if (v.tipo !== "archive") return false;
+                if (bloqueDeseado) return v.bloque === bloqueDeseado;
+                return v.bloque !== "bumper"; // Zapping puro: solo videos
+            });
+            
+            // 2. Excluir historial reciente
+            if (candidatos.length > 1) {
+                candidatos = candidatos.filter(v => !historialReciente.includes(v.id));
             }
+            
+            // 3. Si se acabaron, limpiar historial y reintentar
+            if (candidatos.length === 0) {
+                historialReciente = [];
+                candidatos = biblioteca.filter(v => {
+                    if (v.tipo !== "archive") return false;
+                    if (bloqueDeseado) return v.bloque === bloqueDeseado;
+                    return v.bloque !== "bumper";
+                });
+            }
+
+            // 4. Aplicar peso y elegir
+            let pool = [];
+            candidatos.forEach(v => { for (let i = 0; i < (v.peso || 1); i++) pool.push(v); });
+            
+            if (pool.length > 0) {
+                const elegido = pool[Math.floor(Math.random() * pool.length)];
+                historialReciente.push(elegido.id);
+                if (historialReciente.length > MAX_HISTORIAL) {
+                    historialReciente.shift();
+                }
+                return elegido;
+            }
+            return null;
         }
 
         function reproducirBloqueFijo(bloque) {
@@ -492,7 +596,7 @@ function apagarTV() {
         }
 
         function mostrarEnPantalla(item, offsetSegundos = 0) {
-            ultimoIdMostrado = item.id;
+            
             
             const flash = document.createElement('div');
             flash.className = 'flash-sintonia';
@@ -502,14 +606,8 @@ function apagarTV() {
             const osdTitulo = document.getElementById('osd-titulo');
             osdTitulo.textContent = item.titulo;
             osdTitulo.classList.add('visible');
-			setTimeout(() => osdTitulo.classList.remove('visible'), 15000);
-		// Repetir el título cada 10 minutos
-			clearInterval(window.tituloRepetidor);
-			window.tituloRepetidor = setInterval(function() {
-			osdTitulo.textContent = 'Estás viendo: ' + item.titulo;
-			osdTitulo.classList.add('visible');
-			setTimeout(() => osdTitulo.classList.remove('visible'), 10000);
-		}, 600000);
+            setTimeout(() => osdTitulo.classList.remove('visible'), 8000);
+
             const layer1 = document.getElementById('video-layer-1');
             const layer2 = document.getElementById('video-layer-2');
             const webFrame = document.getElementById('web-frame');
@@ -653,8 +751,24 @@ function apagarTV() {
             }
         });
 
-        generarMenuOSD();
+                    generarMenuOSD();
         cargarPlaylist();
+
+        // CONTADOR DE VIEWERS EN LÍNEA
+        let viewerCount = 14;
+        function actualizarViewers() {
+            const el = document.getElementById('viewer-count');
+            if (el) {
+                const cambio = Math.floor(Math.random() * 3) - 1;
+                viewerCount = Math.max(8, Math.min(25, viewerCount + cambio));
+                el.textContent = viewerCount;
+            }
+            // Se programa siempre, esté la TV encendida o apagada
+            setTimeout(actualizarViewers, (Math.random() * 45000) + 45000);
+        }
+        
+        // Iniciar el contador
+        actualizarViewers();
     </script>
 </body>
 </html>
