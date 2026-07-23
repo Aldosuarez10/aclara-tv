@@ -1,7 +1,7 @@
 [
   {
     "id": "documental-tierra-plana-completo-naov-101219",
-    "titulo": "documental-tierra-plana-completo-naov-101219",
+    "titulo": "Documental tierra plana | completo-naov-101219",
     "bloque": "ciencia",
     "tipo": "archive",
     "duracion": null,
@@ -9,7 +9,7 @@
   },
   {
     "id": "youtube-WGsE0PFXD00",
-    "titulo": "35 Preguntas-a-la-TierraPlana",
+    "titulo": "35 Preguntas a la TierraPlana",
     "bloque": "ciencia",
     "tipo": "archive",
     "duracion": null,
@@ -17,7 +17,7 @@
   },
   {
     "id": "youtube-Sb1GrvWgciY",
-    "titulo": "Nuevo-Documental-Tierra-Plana",
+    "titulo": "Nuevo Documental Tierra Plana",
     "bloque": "ciencia",
     "tipo": "archive",
     "duracion": null,
@@ -25,71 +25,15 @@
   },
   {
     "id": "youtube-I2MYVkI9CvQ",
-    "titulo": "El-Siguiente-Nivel",
+    "titulo": "El Siguiente Nivel",
     "bloque": "ciencia",
     "tipo": "archive",
     "duracion": null,
     "peso": 9
   },
   {
-    "id": "youtube-qYXIR2ffSA0",
-    "titulo": "Imagenes-Tartaria",
-    "bloque": "misterio",
-    "tipo": "archive",
-    "duracion": null,
-    "peso": 9
-  },
-  {
-    "id": "entendendo-o-ataque-sionista-a-civilizacao-ocidental-deletado",
-    "titulo": "entendendo-o-ataque-sionista-a-civilizacao-ocidental-deletado",
-    "bloque": "historia",
-    "tipo": "archive",
-    "duracion": null,
-    "peso": 9
-  },
-  {
-    "id": "como-funciona-o-sistema-bancario-no-mundo",
-    "titulo": "como-funciona-o-sistema-bancario-no-mundo",
-    "bloque": "historia",
-    "tipo": "archive",
-    "duracion": null,
-    "peso": 9
-  },
-  {
-    "id": "la-corporacion-en-espanol-documental",
-    "titulo": "la-corporacion-en-espanol-documental",
-    "bloque": "historia",
-    "tipo": "archive",
-    "duracion": null,
-    "peso": 9
-  },
-  {
-    "id": "74wilhemreichylaorgonomiamp4",
-    "titulo": "74wilhemreichylaorgonomiamp4",
-    "bloque": "historia",
-    "tipo": "archive",
-    "duracion": null,
-    "peso": 9
-  },
-  {
-    "id": "youtube-ssqwuuiTbY8",
-    "titulo": "Antigravedad-Tesla",
-    "bloque": "historia",
-    "tipo": "archive",
-    "duracion": null,
-    "peso": 9
-  },
-  {
-    "id": "la-antigravedad-el-gran-secreto",
-    "titulo": "la-antigravedad-el-gran-secreto",
-    "bloque": "historia",
-    "tipo": "archive",
-    "duracion": null,
-    "peso": 9
-  },
-  {
     "id": "las-fallas-de-la-arqueologia",
-    "titulo": "las-fallas-de-la-arqueologia",
+    "titulo": "Las fallas de la Arqueología",
     "bloque": "ciencia",
     "tipo": "archive",
     "duracion": null,
@@ -97,7 +41,7 @@
   },
   {
     "id": "astronomia-vieja-impostora",
-    "titulo": "astronomia-vieja-impostora",
+    "titulo": "Astronomia | Vieja Impostora",
     "bloque": "ciencia",
     "tipo": "archive",
     "duracion": null,
@@ -105,15 +49,167 @@
   },
   {
     "id": "antartida-la-tierra-prohibida-aportes-la-claraboya",
-    "titulo": "antartida-la-tierra-prohibida-aportes-la-claraboya",
+    "titulo": "Antartida | La tierra prohibida",
     "bloque": "ciencia",
     "tipo": "archive",
     "duracion": null,
     "peso": 9
   },
   {
+    "id": "operazionelunastanleykubrikeilfintoallunaggio480x854",
+    "titulo": "Stanley Kubrik ei finto al lunaggio(italiano)",
+    "bloque": "ciencia",
+    "tipo": "archive",
+    "duracion": null,
+    "peso": 9
+  },
+  {
+    "id": "youtube-rqo8DRx5QnA",
+    "titulo": "APOLLO y KUBRIK (inglés)",
+    "bloque": "ciencia",
+    "tipo": "archive",
+    "duracion": null,
+    "peso": 9
+  },
+  {
+    "id": "youtube-yCpimrYVMDI",
+    "titulo": "Chaman dio la clave para escapar de la matrix",
+    "bloque": "espiritualidad",
+    "tipo": "archive",
+    "duracion": null,
+    "peso": 9
+  },
+  {
+    "id": "youtube-YbtsmgdDJ20",
+    "titulo": "ES REALMENTE TUYA TU MENTE? PARASITOS ENERGÉTICOS.",
+    "bloque": "espiritualidad",
+    "tipo": "archive",
+    "duracion": null,
+    "peso": 9
+  },
+  {
+    "id": "youtube-5vdLuKFr2Mc",
+    "titulo": "La muerte como consejera",
+    "bloque": "espiritualidad",
+    "tipo": "archive",
+    "duracion": null,
+    "peso": 9
+  },
+  {
+    "id": "educativos3_yelkarmadijoalgundiavasallorarporcosasqueanteshicisteentrerisas_3d0b41cb",
+    "titulo": "El Karma dijo algun dia vas a llorar por cosas que antes hiciste entre risas",
+    "bloque": "espiritualidad",
+    "tipo": "archive",
+    "duracion": null,
+    "peso": 9
+  },
+  {
+    "id": "el-karma-se-hereda-de-una-vida-a-otra-pregunta-a-luis-garre",
+    "titulo": "¿El Karma se hereda de una vida a otra?",
+    "bloque": "espiritualidad",
+    "tipo": "archive",
+    "duracion": null,
+    "peso": 9
+  },
+  {
+    "id": "youtube-RFx0MDTTcHM",
+    "titulo": "Radiónica | El poder de la mente",
+    "bloque": "espiritualidad",
+    "tipo": "archive",
+    "duracion": null,
+    "peso": 9
+  },
+  {
+    "id": "youtube--zUzCvUQVIY",
+    "titulo": "EL VIAJE DEL HÉROE",
+    "bloque": "espiritualidad",
+    "tipo": "archive",
+    "duracion": null,
+    "peso": 9
+  },
+  {
+    "id": "youtube-7vm0erTamTk",
+    "titulo": "EL ARTE DE CAMBIAR TU VIDA",
+    "bloque": "espiritualidad",
+    "tipo": "archive",
+    "duracion": null,
+    "peso": 9
+  },
+  {
+    "id": "youtube-wL6jTigDBX4",
+    "titulo": "CAMBIA TU ADN | CAMBIA TU VIDA",
+    "bloque": "espiritualidad",
+    "tipo": "archive",
+    "duracion": null,
+    "peso": 9
+  },
+  {
+    "id": "youtube-4P8g8VGGDeU",
+    "titulo": "DESOBEDIENCIA PACÍFICA",
+    "bloque": "espiritualidad",
+    "tipo": "archive",
+    "duracion": null,
+    "peso": 9
+  },
+  {
+    "id": "youtube-qYXIR2ffSA0",
+    "titulo": "Imagenes Tartaria",
+    "bloque": "misterio",
+    "tipo": "archive",
+    "duracion": null,
+    "peso": 9
+  },
+  {
+    "id": "entendendo-o-ataque-sionista-a-civilizacao-ocidental-deletado",
+    "titulo": "Entendendo o ataque sionista a civilizacao-ocidental",
+    "bloque": "historia",
+    "tipo": "archive",
+    "duracion": null,
+    "peso": 9
+  },
+  {
+    "id": "como-funciona-o-sistema-bancario-no-mundo",
+    "titulo": "Sistema Bancario",
+    "bloque": "historia",
+    "tipo": "archive",
+    "duracion": null,
+    "peso": 9
+  },
+  {
+    "id": "la-corporacion-en-espanol-documental",
+    "titulo": "La Corporación| Documental (español)",
+    "bloque": "historia",
+    "tipo": "archive",
+    "duracion": null,
+    "peso": 9
+  },
+  {
+    "id": "74wilhemreichylaorgonomiamp4",
+    "titulo": "Wilhem Reich | La Orgonomia",
+    "bloque": "historia",
+    "tipo": "archive",
+    "duracion": null,
+    "peso": 9
+  },
+  {
+    "id": "youtube-ssqwuuiTbY8",
+    "titulo": "Antigravedad | Tesla",
+    "bloque": "historia",
+    "tipo": "archive",
+    "duracion": null,
+    "peso": 9
+  },
+  {
+    "id": "la-antigravedad-el-gran-secreto",
+    "titulo": "La antigravedad | El gran secreto",
+    "bloque": "historia",
+    "tipo": "archive",
+    "duracion": null,
+    "peso": 9
+  },
+  {
     "id": "interpol-una-mafia-solapada",
-    "titulo": "interpol-una-mafia-solapada",
+    "titulo": "Interpol | Una mafia solapada",
     "bloque": "historia",
     "tipo": "archive",
     "duracion": null,
@@ -121,7 +217,7 @@
   },
   {
     "id": "documental-jacques-de-mahieu-la-farsa-de-colon-y-el-descubrimiento-de-america-1",
-    "titulo": "documental-jacques-de-mahieu-la-farsa-de-colon-y-el-descubrimiento-de-america-1",
+    "titulo": "Documental jacques-de-mahieu | La farsa del descubrimiento",
     "bloque": "historia",
     "tipo": "archive",
     "duracion": null,
@@ -129,7 +225,7 @@
   },
   {
     "id": "el-informe-leuchter-como-se-nos-oculta-la-verdad",
-    "titulo": "el-informe-leuchter-como-se-nos-oculta-la-verdad",
+    "titulo": "Informe Leuchter | Se-nos-oculta-la-verdad",
     "bloque": "historia",
     "tipo": "archive",
     "duracion": null,
@@ -137,7 +233,7 @@
   },
   {
     "id": "whats-app-video-2025-10-25-at-13.55.35",
-    "titulo": "whats-app-video-2025-10-25-at-13.55.35",
+    "titulo": "⚔️ LA HISTORIA SIEMPRE LA CUENTAN LOS VENCEDORES 🕰️",
     "bloque": "historia",
     "tipo": "archive",
     "duracion": null,
@@ -145,7 +241,7 @@
   },
   {
     "id": "youtube-JorKMC1UU6Q",
-    "titulo": "youtube-JorKMC1UU6Q",
+    "titulo": "CIVILIZACIÓN, CIENCIA Y CULTURA EN HISPANOAMÉRICA (LG)",
     "bloque": "historia",
     "tipo": "archive",
     "duracion": null,
@@ -153,15 +249,7 @@
   },
   {
     "id": "youtube-IMHCxrkGaMA",
-    "titulo": "youtube-IMHCxrkGaMA",
-    "bloque": "historia",
-    "tipo": "archive",
-    "duracion": null,
-    "peso": 9
-  },
-  {
-    "id": "youtube-R1FEb-tqUyo",
-    "titulo": "youtube-R1FEb-tqUyo",
+    "titulo": "Sin DIOS, ni PATRIA, ni FAMILIA | La propuesta WOKE | élites",
     "bloque": "historia",
     "tipo": "archive",
     "duracion": null,
@@ -169,7 +257,7 @@
   },
   {
     "id": "youtube-kut50kZgyZE",
-    "titulo": "youtube-kut50kZgyZE",
+    "titulo": "¿Cómo se gestó la AGENDA 2030? | Consultora ONU y OEA",
     "bloque": "historia",
     "tipo": "archive",
     "duracion": null,
@@ -177,7 +265,7 @@
   },
   {
     "id": "youtube-oeeXgVyq0bc",
-    "titulo": "youtube-oeeXgVyq0bc",
+    "titulo": "¿EDUCACIÓN o iniciación SEXUAL?",
     "bloque": "historia",
     "tipo": "archive",
     "duracion": null,
@@ -185,7 +273,7 @@
   },
   {
     "id": "youtube-Rrvgz-b5BcY",
-    "titulo": "youtube-Rrvgz-b5BcY",
+    "titulo": "La Historia de Oppenheimer | Prohibida en Japón",
     "bloque": "historia",
     "tipo": "archive",
     "duracion": null,
@@ -193,7 +281,7 @@
   },
   {
     "id": "youtube-UwpU6qHk8TY",
-    "titulo": "youtube-UwpU6qHk8TY",
+    "titulo": "¿No tener más hijos? Entrevista a Lucrecia Rego",
     "bloque": "historia",
     "tipo": "archive",
     "duracion": null,
@@ -201,7 +289,55 @@
   },
   {
     "id": "youtube-2rsaXmMr9MM",
-    "titulo": "youtube-2rsaXmMr9MM",
+    "titulo": "MAFIA MASONERÍA P2 (italiano)",
+    "bloque": "historia",
+    "tipo": "archive",
+    "duracion": null,
+    "peso": 9
+  },
+  {
+    "id": "que-es-un-teorico-de-la-conspiracion",
+    "titulo": "QUÉ ES UN TEÓRICO DE COSNPIRACIÓN",
+    "bloque": "historia",
+    "tipo": "archive",
+    "duracion": null,
+    "peso": 9
+  },
+  {
+    "id": "youtube-rl59U6LNpQE",
+    "titulo": "El GRAN RESETEO",
+    "bloque": "historia",
+    "tipo": "archive",
+    "duracion": null,
+    "peso": 9
+  },
+  {
+    "id": "youtube-VY7a8lto2mU",
+    "titulo": "Moda FEMENINA",
+    "bloque": "historia",
+    "tipo": "archive",
+    "duracion": null,
+    "peso": 9
+  },
+  {
+    "id": "Adolf Hitler - El Hombre Que SÍ Luchó Contra La Casta mundial",
+    "titulo": "Adolf Hitler - El Hombre Que SÍ Luchó Contra La Casta mundial",
+    "bloque": "historia",
+    "tipo": "archive",
+    "duracion": null,
+    "peso": 9
+  },
+  {
+    "id": "lasbombasatomicassonunafarsa",
+    "titulo": "Bombas Atómicas | La Farsa",
+    "bloque": "historia",
+    "tipo": "archive",
+    "duracion": null,
+    "peso": 9
+  },
+  {
+    "id": "youtube-8YD7s10RYYc",
+    "titulo": "POR QUÉ HICIERON EL 11S",
     "bloque": "historia",
     "tipo": "archive",
     "duracion": null,
