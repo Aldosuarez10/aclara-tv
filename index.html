@@ -9,11 +9,20 @@
     <style>
         :root { --accent: #ff9d00; --glow: rgba(255, 157, 0, 0.3); --menu-bg: rgba(119, 214, 255, 0.25); --menu-text: #001a33; }
         body, html { margin: 0; padding: 0; width: 100%; height: 100%; background: radial-gradient(circle at center, #4a2800 0%, #1a0e00 100%); overflow: hidden; font-family: 'Segoe UI', sans-serif; }
+        
         #escenario { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; position: relative; }
 
+        /* CONTENEDOR PADRE: Mantiene proporción y ancla el control */
+        #contenedor-tv {
+            position: relative;
+            width: min(1000px, 92vw);
+            aspect-ratio: 16/9;
+        }
+
         #marco-tv {
-            width: min(1000px, 92vw); aspect-ratio: 16/9; background: #000; border: 18px solid #0a0a0a; border-radius: 8px;
-            box-shadow: 0 0 60px rgba(255, 157, 0, 0.4), 0 0 100px rgba(255, 157, 0, 0.2), 0 30px 60px rgba(0,0,0,0.95), inset 0 0 0 1px rgba(255,255,255,0.05);
+            width: 100%; height: 100%;
+            background: #000; border: 1.8vmin solid #0a0a0a; border-radius: 0.8vmin;
+            box-shadow: 0 0 6vmin rgba(255, 157, 0, 0.4), 0 0 10vmin rgba(255, 157, 0, 0.2), 0 3vmin 6vmin rgba(0,0,0,0.95), inset 0 0 0 0.1vmin rgba(255,255,255,0.05);
             position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center; z-index: 5;
             cursor: pointer;
         }
@@ -23,127 +32,147 @@
             pointer-events: none; z-index: 1;
         }
 
-        #logo-estacion {
-            position: absolute; top: 25px; right: 35px; font-weight: 700; font-size: 20px; letter-spacing: 1px;
+                #logo-estacion {
+            position: absolute; top: 3vmin; right: 4vmin; font-weight: 700; font-size: 3.5vmin; letter-spacing: 0.1vmin;
             background: linear-gradient(120deg, #ff0080 0%, #ff8c00 25%, #40e0d0 50%, #ff0080 75%, #ff8c00 100%);
             background-size: 200% 200%; -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
             animation: tornasol 8s ease-in-out infinite; z-index: 10; user-select: none;
         }
-		#contador-viewers {
-            position: absolute; top: 55px; right: 35px; z-index: 10;
-            color: rgba(255, 255, 255, 0.7); font-size: 13px; font-weight: 600;
-            display: flex; align-items: center; gap: 5px;
-            text-shadow: 0 0 5px rgba(0,0,0,0.8); user-select: none;
+        #contador-viewers {
+            position: absolute; top: 7vmin; right: 4vmin; z-index: 10;
+            color: rgba(255, 255, 255, 0.7); font-size: 2vmin; font-weight: 600;
+            display: flex; align-items: center; gap: 0.5vmin;
+            text-shadow: 0 0 0.5vmin rgba(0,0,0,0.8); user-select: none;
             opacity: 0; transition: opacity 0.5s;
         }
-        .tv-on #contador-viewers { opacity: 1; }
-        @keyframes tornasol { 0%, 100% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } }
-
         #en-vivo {
-            position: absolute; top: 25px; left: 35px; z-index: 10; display: none; align-items: center; gap: 8px;
-            color: #fff; font-weight: bold; font-size: 14px; letter-spacing: 1px; text-shadow: 0 0 10px rgba(255,0,0,0.5);
+            position: absolute; top: 3vmin; left: 4vmin; z-index: 10; display: none; align-items: center; gap: 0.8vmin;
+            color: #fff; font-weight: bold; font-size: 2.2vmin; letter-spacing: 0.1vmin; text-shadow: 0 0 1vmin rgba(255,0,0,0.5);
             user-select: none; -webkit-user-select: none;
         }
-        .punto-rojo { width: 10px; height: 10px; background: #f00; border-radius: 50%; box-shadow: 0 0 8px #f00; animation: parpadeo 1.5s infinite; }
+		.punto-rojo { 
+            width: 1.2vmin; height: 1.2vmin; background: #f00; border-radius: 50%; 
+            box-shadow: 0 0 1vmin #f00; animation: parpadeo 1.5s infinite; 
+        }
         @keyframes parpadeo { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
-
-        #reloj-en-vivo {
-            position: absolute; bottom: 25px; left: 35px; z-index: 10;
+        
+		#reloj-en-vivo {
+            position: absolute; bottom: 3.5vmin; left: 4vmin; z-index: 10;
             color: rgba(255, 255, 255, 0.8); font-family: 'Courier New', monospace;
-            font-size: 16px; font-weight: bold; letter-spacing: 2px;
-            text-shadow: 0 0 5px rgba(0,0,0,0.9); user-select: none;
+            font-size: 2.8vmin; font-weight: bold; letter-spacing: 0.2vmin;
+            text-shadow: 0 0 0.5vmin rgba(0,0,0,0.9); user-select: none;
         }
 
         #osd-titulo {
-            position: absolute; bottom: 60px; left: 35px; z-index: 15;
-            background: rgba(0,0,0,0.85); color: #fff; padding: 10px 18px;
-            border-left: 4px solid var(--accent); border-radius: 0 6px 6px 0;
-            font-size: 15px; font-weight: 600; letter-spacing: 0.5px;
-            opacity: 0; transform: translateX(-20px);
+            position: absolute; bottom: 6vmin; left: 3.5vmin; z-index: 15;
+            background: rgba(0,0,0,0.85); color: #fff; padding: 1vmin 1.8vmin;
+            border-left: 0.4vmin solid var(--accent); border-radius: 0 0.6vmin 0.6vmin 0;
+            font-size: 1.5vmin; font-weight: 600; letter-spacing: 0.05vmin;
+            opacity: 0; transform: translateX(-2vmin);
             transition: all 0.4s ease-out; pointer-events: none;
             max-width: 65%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
         }
         #osd-titulo.visible { opacity: 1; transform: translateX(0); }
 
         #estado-cargando {
-            position: absolute; bottom: 25px; right: 35px; z-index: 10;
-            color: rgba(255, 157, 0, 0.7); font-size: 11px; letter-spacing: 1px; user-select: none;
+            position: absolute; bottom: 2.5vmin; right: 3.5vmin; z-index: 10;
+            color: rgba(255, 157, 0, 0.7); font-size: 1.2vmin; letter-spacing: 0.1vmin; user-select: none;
         }
 
-        #sintonia { text-align: center; color: var(--accent); z-index: 5; text-shadow: 0 0 15px var(--glow); transition: 0.5s; }
+        #sintonia { text-align: center; color: var(--accent); z-index: 5; text-shadow: 0 0 1.5vmin var(--glow); transition: 0.5s; }
+        #sintonia h1 { font-size: 4vmin; margin: 0; }
+        #sintonia p { opacity: 0.6; font-size: 1.5vmin; }
+        
         .flash-sintonia { position: absolute; inset: 0; background: rgba(255,255,255,0.8); z-index: 15; pointer-events: none; animation: flash 0.4s ease-out; }
         @keyframes flash { 0% { opacity: 0.8; } 100% { opacity: 0; } }
 
+        /* Menú OSD: Anclado al control, contenido dentro del marco */
         #osd-menu {
             position: absolute; bottom: 100%; left: 50%; transform: translateX(-50%) scaleY(0);
-            transform-origin: bottom center; width: 280px; height: 0; background: var(--menu-bg);
-            backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); border: 1px solid rgba(119, 214, 255, 0.4);
-            border-radius: 20px; padding: 0 30px; z-index: 25; display: flex; flex-direction: column;
-            justify-content: center; gap: 10px; box-shadow: 0 -10px 40px rgba(0,0,0,0.6); opacity: 0;
+            transform-origin: bottom center; width: 28vmin; height: 0; background: var(--menu-bg);
+            backdrop-filter: blur(0.8vmin); -webkit-backdrop-filter: blur(0.8vmin); border: 0.1vmin solid rgba(119, 214, 255, 0.4);
+            border-radius: 2vmin; padding: 0 3vmin; z-index: 25; display: flex; flex-direction: column;
+            justify-content: center; gap: 1vmin; box-shadow: 0 -1vmin 4vmin rgba(0,0,0,0.6); opacity: 0;
             transition: all 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55); overflow: hidden;
+            margin-bottom: 1vmin;
         }
-        #osd-menu.activo { height: auto; padding: 20px 30px; opacity: 1; transform: translateX(-50%) scaleY(1); }
+        #osd-menu.activo { height: auto; padding: 2vmin 3vmin; opacity: 1; transform: translateX(-50%) scaleY(1); }
 
         .osd-opcion {
-            background: rgba(255, 255, 255, 0.3); color: var(--menu-text); font-weight: 800; font-size: 16px;
-            padding: 10px 30px; border-radius: 8px; text-align: center; cursor: pointer; border: 1px solid rgba(0, 26, 51, 0.1);
-            transition: 0.2s; user-select: none; letter-spacing: 1px;
+            background: rgba(255, 255, 255, 0.3); color: var(--menu-text); font-weight: 800; font-size: 1.6vmin;
+            padding: 1vmin 3vmin; border-radius: 0.8vmin; text-align: center; cursor: pointer; border: 0.1vmin solid rgba(0, 26, 51, 0.1);
+            transition: 0.2s; user-select: none; letter-spacing: 0.1vmin;
         }
         .osd-opcion:hover, .osd-opcion:active { background: rgba(119, 214, 255, 0.6); transform: scale(1.05); }
 
+                /* Control Remoto: Arranca grande al centro, luego se va a la derecha */
         #cntrl-box {
-            position: absolute; bottom: 15%; left: 50%; transform: translateX(-50%); z-index: 20;
-            perspective: 800px; transition: all 0.8s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+            position: absolute; top: 50%; left: 50%;
+            transform: translate(-50%, 50%) scale(1.2); /* Bajado un 100% en el eje Y */
+            z-index: 20; perspective: 800px;
+            transition: all 0.8s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+            touch-action: none; -webkit-user-select: none; user-select: none;
         }
-        #cntrl-box.retirado { transform: translate(250px, 150px) scale(0.6) rotateX(20deg); opacity: 0.7; }
-        #cntrl-box.retirado:hover { opacity: 1; transform: translate(250px, 150px) scale(0.65) rotateX(20deg); }
+        
+                #cntrl-box.retirado {
+            top: 90%; 
+            left: 90%; 
+            /* rotateX(0deg) lo deja recto. Opacidad 0.6 le da transparencia */
+            transform: translate(-40%, -50%) scale(1.1) rotateX(0deg);
+            opacity: 0.6; 
+        }
+
+        #cntrl-box.retirado:hover {
+            /* La misma escala (1.1) para que NO cambie de tamaño, solo la opacidad */
+            opacity: 1; 
+            transform: translate(-40%, -50%) scale(1.1) rotateX(0deg);
+        }
+        /* Menú OSD: Desplazado a la izquierda para no salirse de la pantalla */
+        /* Menú OSD: Anclado al control pero contenido dentro del marco */
+		#osd-menu {
+			position: absolute; bottom: 100%; left: 50%; transform: translateX(-50%) scaleY(0);
+			... 
+		}
+		#osd-menu.activo { ... }
+        #osd-menu.activo { height: auto; padding: 2vmin 3vmin; opacity: 1; transform: translateX(-80%) scaleY(1.1); }
 
         #control {
-            width: 140px; height: 180px; background: linear-gradient(180deg, #1a1a1a 0%, #000 100%);
-            border-radius: 20px; border: 1px solid #2a2a2a; cursor: pointer; display: flex; flex-direction: column;
-            align-items: center; justify-content: flex-start; padding-top: 20px; position: relative;
-            transform: rotateX(35deg); box-shadow: 0 25px 50px rgba(0,0,0,0.9), inset 0 2px 4px rgba(255,255,255,0.1), inset 0 -2px 4px rgba(0,0,0,0.8);
+            width: 14vmin; height: 18vmin; background: linear-gradient(180deg, #1a1a1a 0%, #000 100%);
+            border-radius: 2vmin; border: 0.1vmin solid #2a2a2a; cursor: pointer; display: flex; flex-direction: column;
+            align-items: center; justify-content: flex-start; padding-top: 2vmin; position: relative;
+            transform: rotateX(35deg); box-shadow: 0 2.5vmin 5vmin rgba(0,0,0,0.9), inset 0 0.2vmin 0.4vmin rgba(255,255,255,0.1), inset 0 -0.2vmin 0.4vmin rgba(0,0,0,0.8);
             transition: 0.2s;
         }
         #control::before {
             content: ''; position: absolute; top: 5%; left: 15%; right: 15%; height: 25%;
-            background: linear-gradient(180deg, rgba(255,255,255,0.12) 0%, transparent 100%); border-radius: 15px 15px 0 0; pointer-events: none;
+            background: linear-gradient(180deg, rgba(255,255,255,0.12) 0%, transparent 100%); border-radius: 1.5vmin 1.5vmin 0 0; pointer-events: none;
         }
-        #control:active { transform: rotateX(40deg) translateY(3px); box-shadow: 0 15px 30px rgba(0,0,0,0.95); }
+        #control:active { transform: rotateX(40deg) translateY(0.3vmin); box-shadow: 0 1.5vmin 3vmin rgba(0,0,0,0.95); }
 
         .btn-remoto {
-            width: 50px; height: 50px; border-radius: 50%; margin: 10px 0;
+            width: 5vmin; height: 5vmin; border-radius: 50%; margin: 1vmin 0;
             background: radial-gradient(circle at 30% 30%, #2a2a2a 0%, #0a0a0a 100%);
-            border: 2px solid #3a3a3a; display: flex; align-items: center; justify-content: center;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.7), inset 0 2px 4px rgba(255,255,255,0.1);
-            font-weight: bold; font-size: 12px; transition: 0.1s; user-select: none; outline: none;
+            border: 0.2vmin solid #3a3a3a; display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 0.4vmin 0.8vmin rgba(0,0,0,0.7), inset 0 0.2vmin 0.4vmin rgba(255,255,255,0.1);
+            font-weight: bold; font-size: 1.2vmin; transition: 0.1s; user-select: none; outline: none;
         }
         .btn-remoto:active { transform: scale(0.95); background: #0a0a0a; }
 
-        #btn-power { border-color: #4a4a4a; margin-top: 15px; color: #888; font-size: 10px; position: relative; }
-        #btn-power::before { content: ''; width: 20px; height: 20px; border: 3px solid #888; border-top: none; border-radius: 50%; position: absolute; }
-        #btn-power::after { content: ''; width: 3px; height: 12px; background: #888; position: absolute; top: 12px; left: 21px; }
+        #btn-power { border-color: #4a4a4a; margin-top: 1.5vmin; color: #888; font-size: 1vmin; position: relative; }
+        #btn-power::before { content: ''; width: 2vmin; height: 2vmin; border: 0.3vmin solid #888; border-top: none; border-radius: 50%; position: absolute; }
+        #btn-power::after { content: ''; width: 0.3vmin; height: 1.2vmin; background: #888; position: absolute; top: 1.2vmin; left: 2.1vmin; }
 
-        #btn-menu { border-color: #3a3a3a; opacity: 0.3; pointer-events: none; color: #555; font-size: 11px; }
-        .tv-on #btn-menu { opacity: 1; pointer-events: all; border-color: #00ff41; color: #00ff41; text-shadow: 0 0 8px #00ff41; }
+        #btn-menu { border-color: #3a3a3a; opacity: 0.3; pointer-events: none; color: #555; font-size: 1.1vmin; }
+        .tv-on #btn-menu { opacity: 1; pointer-events: all; border-color: #00ff41; color: #00ff41; text-shadow: 0 0 0.8vmin #00ff41; }
 
-		.btn-vol {
-		width: 35px !important;
-		height: 35px !important;
-		font-size: 14px !important;
-		margin: 0 !important;
-		opacity: 0;
-		pointer-events: none;
-		transition: opacity 0.3s;
-		}
-		.tv-on .btn-vol {
-		opacity: 1;
-		pointer-events: all;
-		border-color: #ff9d00;
-		cursor: pointer;
-		}
-        #luz { position: absolute; top: 15px; right: 15px; width: 8px; height: 8px; border-radius: 50%; background: #300; box-shadow: inset 0 1px 2px rgba(0,0,0,0.5); transition: 0.3s; }
-        .encendido #luz { background: #f00; box-shadow: 0 0 12px #f00, inset 0 1px 2px rgba(255,255,255,0.3); animation: pulse 2s ease-in-out infinite; }
+        .btn-vol {
+            width: 3.5vmin !important; height: 3.5vmin !important; font-size: 1.4vmin !important;
+            margin: 0 !important; opacity: 0; pointer-events: none; transition: opacity 0.3s;
+        }
+        .tv-on .btn-vol { opacity: 1; pointer-events: all; border-color: #ff9d00; cursor: pointer; }
+
+        #luz { position: absolute; top: 1.5vmin; right: 1.5vmin; width: 0.8vmin; height: 0.8vmin; border-radius: 50%; background: #300; box-shadow: inset 0 0.1vmin 0.2vmin rgba(0,0,0,0.5); transition: 0.3s; }
+        .encendido #luz { background: #f00; box-shadow: 0 0 1.2vmin #f00, inset 0 0.1vmin 0.2vmin rgba(255,255,255,0.3); animation: pulse 2s ease-in-out infinite; }
         @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.6; } }
 
         .pantalla { width: 100%; height: 100%; overflow: hidden; position: relative; background: #000; display: none; }
@@ -160,8 +189,20 @@
             border: none; transform: scale(1.05); z-index: 2; background: #000;
         }
 
+        #osd-volumen {
+            position: absolute; bottom: 18vmin; /* Subido bastante */
+            right: 8vmin; z-index: 15;
+            background: rgba(0,0,0,0.7); padding: 0.8vmin 1.5vmin; border-radius: 1vmin;
+            display: flex; align-items: center; gap: 1vmin;
+            opacity: 0; transition: opacity 0.4s; pointer-events: none;
+        }
+        #osd-volumen span:first-child { color: #ff9d00; font-size: 1.8vmin; }
+        #barra-vol-contenedor { width: 12vmin; height: 0.8vmin; background: #333; border-radius: 0.4vmin; overflow: hidden; }
+        #barra-vol { width: 100%; height: 100%; background: #ff9d00; border-radius: 0.4vmin; transition: width 0.2s; }
+        #txt-vol { color: #fff; font-size: 1.5vmin; font-family: monospace; min-width: 4vmin; }
+
         #pantalla-fuera-aire {
-            display: none; position: absolute; inset: 0; 
+            display: none; position: fixed; inset: 0; 
             background: radial-gradient(circle at center, #4a2800 0%, #1a0e00 100%); 
             z-index: 200; flex-direction: column; align-items: center; justify-content: center; 
             text-align: center; padding: 20px;
@@ -169,79 +210,67 @@
 
         @media (max-width: 768px) {
             .web-layer { transform: scale(1.0); }
-            #cntrl-box.retirado { transform: translate(0, 120px) scale(0.7); bottom: 5%; }
+            #cntrl-box.retirado { transform: translateX(-50%) translateY(12vmin) scale(0.7); }
         }
     </style>
 </head>
 <body>
     <div id="escenario">
-        <div id="marco-tv">
-            <div id="en-vivo"><div class="punto-rojo"></div> EN VIVO</div>
-            <div id="logo-estacion">@LaClaraTV</div>
-			<div id="contador-viewers">👁 <span id="viewer-count">14</span> en línea</div>
-            <div id="reloj-en-vivo">00:00:00</div>
-            <div id="osd-titulo"></div>
-			<div id="osd-volumen" style="
-				position: absolute;
-				bottom: 55px;
-				right: 60px;
-				z-index: 15;
-				background: rgba(0,0,0,0.7);
-				padding: 6px 12px;
-				border-radius: 8px;
-				display: flex;
-				align-items: center;
-				gap: 8px;
-				opacity: 0;
-				transition: opacity 0.4s;
-				pointer-events: none;
-			">
-    <span style="color:#ff9d00; font-size:14px;">🔊</span>
-    <div style="width:100px; height:6px; background:#333; border-radius:3px; overflow:hidden;">
-        <div id="barra-vol" style="width:100%; height:100%; background:#ff9d00; border-radius:3px; transition: width 0.2s;"></div>
-    </div>
-    <span id="txt-vol" style="color:#fff; font-size:12px; font-family:monospace; min-width:35px;">100%</span>
-</div>
-            <div id="estado-cargando"></div>
+        <div id="contenedor-tv">
+            <div id="marco-tv">
+                <div id="en-vivo"><div class="punto-rojo"></div> EN VIVO</div>
+                <div id="logo-estacion">@LaClaraTV</div>
+                <div id="contador-viewers">👁 <span id="viewer-count">14</span> en línea</div>
+                <div id="reloj-en-vivo">00:00:00</div>
+                <div id="osd-titulo"></div>
+                <div id="osd-volumen">
+                    <span>🔊</span>
+                    <div id="barra-vol-contenedor">
+                        <div id="barra-vol" style="width:100%;"></div>
+                    </div>
+                    <span id="txt-vol">100%</span>
+                </div>
+                <div id="estado-cargando"></div>
 
-            <div id="sintonia">
-                <h1 style="font-size: 32px; margin: 0;">SEÑAL EN ESPERA</h1>
-                <p style="opacity: 0.6; font-size: 14px;">PRESIONA EL CONTROL</p>
+                <div id="sintonia">
+                    <h1>SEÑAL EN ESPERA</h1>
+                    <p>PRESIONA EL CONTROL</p>
+                </div>
+                
+                <div class="pantalla" id="pantalla-video">
+                    <video id="video-layer-1" class="video-layer" playsinline></video>
+                    <video id="video-layer-2" class="video-layer inactiva" playsinline></video>
+                    <iframe id="web-frame" class="web-layer" style="display: none;" allow="autoplay; fullscreen"></iframe>
+                </div>
             </div>
-            
-            <div class="pantalla" id="pantalla-video">
-			<div id="estatica"></div>
-                <video id="video-layer-1" class="video-layer" playsinline></video>
-                <video id="video-layer-2" class="video-layer inactiva" playsinline></video>
-                <iframe id="web-frame" class="web-layer" style="display: none;" allow="autoplay; fullscreen"></iframe>
+
+            <div id="cntrl-box">
+                <div id="osd-menu">
+                    <div id="menu-dinamico"></div>
+                </div>
+
+                <div id="control">
+                    <div id="luz"></div>
+                    <div class="btn-remoto" id="btn-power" onclick="toggleTV(event)"></div>
+                    <div class="btn-remoto" id="btn-menu" onclick="abrirMenu(event)">MENU</div>
+                    <div style="display:flex; gap:0.6vmin; margin-top:0.5vmin;">
+                        <div class="btn-remoto btn-vol" onclick="cambiarVolumen(-0.1)">🔉</div>
+                        <div class="btn-remoto btn-vol" onclick="cambiarVolumen(0.1)">🔊</div>
+                    </div>
+                </div>
             </div>
         </div>
 
-        <div id="cntrl-box">
-            <div id="osd-menu">
-                <div id="menu-dinamico"></div>
-            </div>
-
-            <div id="control">
-    <div id="luz"></div>
-    <div class="btn-remoto" id="btn-power" onclick="toggleTV(event)"></div>
-    <div class="btn-remoto" id="btn-menu" onclick="abrirMenu(event)">MENU</div>
-    <div style="display:flex; gap:6px; margin-top:5px;">
-    <div class="btn-remoto btn-vol" onclick="cambiarVolumen(-0.1)">🔉</div>
-    <div class="btn-remoto btn-vol" onclick="cambiarVolumen(0.1)">🔊</div>
-			</div>
-	</div>
-    </div>
-
-    <div id="pantalla-fuera-aire">
-        <div style="font-size: 4rem; margin-bottom: 20px;">📺</div>
-        <h1 style="color: #ff9d00; font-size: 2rem; margin: 0; font-weight: 700;">@LaClaraTV</h1>
-        <p style="color: #fff; font-size: 1.3rem; margin: 20px 0; font-weight: 300;">Momentáneamente fuera de aire.</p>
-        <p style="color: #ccc; font-size: 1rem; margin-bottom: 10px;">Dirígete a nuestro canal en vivo:</p>
-        <a href="https://youtube.com/@laclara" target="_blank" style="background: #ff0000; color: #fff; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: bold; font-size: 1.1rem; display: inline-flex; align-items: center; gap: 8px; transition: 0.3s;">
-            <span>▶</span> youtube.com/@laclara
-        </a>
-        <p style="color: #666; margin-top: 40px; font-size: 0.9rem;">¡Vuelve más tarde!</p>
+        <div id="pantalla-fuera-aire">
+            <div style="font-size: 4rem; margin-bottom: 20px;">📺</div>
+            <h1 style="color: #ff9d00; font-size: 2rem; margin: 0; font-weight: 700;">@LaClaraTV</h1>
+            <p style="color: #fff; font-size: 1.3rem; margin: 20px 0; font-weight: 300;">Momentáneamente fuera de aire.</p>
+            <p style="color: #ccc; font-size: 1rem; margin-bottom: 10px;">Dirígete a nuestro canal en vivo:</p>
+            <a href="https://youtube.com/@laclara" target="_blank" style="background: #ff0000; color: #fff; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: bold; font-size: 1.1rem; display: inline-flex; align-items: center; gap: 8px; transition: 0.3s;">
+                <span>▶</span> youtube.com/@laclara
+            </a>
+            <p style="color: #666; margin-top: 40px; font-size: 0.9rem;">¡Vuelve más tarde!</p>
+        </div>
     </div>
 
     <script>
@@ -266,16 +295,15 @@
         let tvEncendida = false;
         let colaBumpers = [];
         let historialReciente = []; 
-		const MAX_HISTORIAL = 8; // Recordará los últimos 8 videos para no repetir
+        const MAX_HISTORIAL = 8;
         let timerAvance = null;
         let capaActiva = 1;
         let bloqueActual = null;
-		let bibliotecaLista = false;
+        let bibliotecaLista = false;
 
         function mostrarFueraDeAire() {
             document.getElementById('pantalla-fuera-aire').style.display = 'flex';
-            document.getElementById('marco-tv').style.display = 'none';
-            document.getElementById('cntrl-box').style.display = 'none';
+            document.getElementById('contenedor-tv').style.display = 'none';
         }
 
         async function cargarPlaylist() {
@@ -299,11 +327,11 @@
             const ahora = Date.now();
 
             if (cache && (ahora - cache.timestamp < 86400000)) {
-			biblioteca = cache.bibliotecaValida;
-			bibliotecaLista = true;
-			console.log("✅ Señal restaurada desde caché");
-			return;
-		}
+                biblioteca = cache.bibliotecaValida;
+                bibliotecaLista = true;
+                console.log("✅ Señal restaurada desde caché");
+                return;
+            }
 
             if (estado) estado.textContent = 'VERIFICANDO SEÑAL...';
             const itemsArchive = biblioteca.filter(v => v.tipo === 'archive');
@@ -338,222 +366,25 @@
             }
 
             localStorage.setItem(cacheKey, JSON.stringify({ timestamp: ahora, bibliotecaValida: biblioteca }));
-			bibliotecaLista = true;
-			if (estado) estado.textContent = '';
+            bibliotecaLista = true;
+            if (estado) estado.textContent = '';
 
-			if (biblioteca.filter(v => v.tipo === 'archive').length === 0) {
-			mostrarFueraDeAire();
-			}
+            if (biblioteca.filter(v => v.tipo === 'archive').length === 0) {
+                mostrarFueraDeAire();
+            }
         }
 
         function elegirSiguiente(bloqueDeseado = null) {
-    // 1. Filtrar candidatos válidos
-    let candidatos = biblioteca.filter(v => v.tipo === "archive" && (bloqueDeseado ? v.bloque === bloqueDeseado : true));
-    
-    // 2. Excluir los que ya están en el historial reciente (¡Aquí estaba el error!)
-    if (candidatos.length > 1) {
-        candidatos = candidatos.filter(v => !historialReciente.includes(v.id));
-    }
-    
-    // 3. Si se vació la lista (ya vimos todo), limpiamos el historial para volver a usar todo
-    if (candidatos.length === 0) {
-        historialReciente = [];
-        candidatos = biblioteca.filter(v => v.tipo === "archive" && (bloqueDeseado ? v.bloque === bloqueDeseado : true));
-    }
-
-    // 4. Aplicar el sistema de "peso" (los más pesados tienen más chances)
-    let pool = [];
-    candidatos.forEach(v => { for (let i = 0; i < (v.peso || 1); i++) pool.push(v); });
-    
-    // 5. Elegir y guardar en historial
-    if (pool.length > 0) {
-        const elegido = pool[Math.floor(Math.random() * pool.length)];
-        historialReciente.push(elegido.id);
-        if (historialReciente.length > MAX_HISTORIAL) {
-            historialReciente.shift(); // Mantiene solo los últimos 8
-        }
-        return elegido;
-    }
-    return null;
-}
-        function obtenerRafagaBumpers() {
-    let bumpers = biblioteca.filter(v => v.bloque === "bumper" && !historialReciente.includes(v.id));
-    
-    // Si ya vimos todos los bumpers, los volvemos a poner en juego
-    if (bumpers.length === 0) {
-        bumpers = biblioteca.filter(v => v.bloque === "bumper");
-    }
-    
-    let rafaga = [];
-    let disponibles = [...bumpers];
-    
-    for (let i = 0; i < 3 && disponibles.length > 0; i++) {
-        const idx = Math.floor(Math.random() * disponibles.length);
-        const elegido = disponibles.splice(idx, 1)[0];
-        rafaga.push(elegido);
-        
-        // Agregar al historial principal para que no se repita pronto
-        historialReciente.push(elegido.id);
-        if (historialReciente.length > MAX_HISTORIAL) {
-            historialReciente.shift();
-        }
-    }
-    return rafaga;
-}
-
-        function generarMenuOSD() {
-            const menuContainer = document.getElementById('menu-dinamico');
-            const opciones = [
-                { label: "📺 ZAPPING", accion: () => cambiarCanal('zapping') },
-                { label: "🔍 MISTERIO", accion: () => cambiarCanal('misterio') },
-                { label: "📜 GEOPOLÍTICA", accion: () => cambiarCanal('historia') },
-                { label: "🧪 CIENCIA", accion: () => cambiarCanal('ciencia') },
-                { label: "🕉️ ESPIRITUALIDAD", accion: () => cambiarCanal('espiritualidad') },
-                { label: "🔮 VIERNES MÍSTICOS", accion: () => cambiarCanal('viernes') },
-                { label: "🌀 UNIVERSO 2° ANILLO", accion: () => cambiarCanal('universo') }
-            ];
-            menuContainer.innerHTML = opciones.map(op => `<div class="osd-opcion" onclick="ejecutarAccionMenu(this)">${op.label}</div>`).join('');
-            window.opcionesMenu = opciones;
-        }
-
-        function ejecutarAccionMenu(elemento) {
-            const index = Array.from(elemento.parentNode.children).indexOf(elemento);
-            window.opcionesMenu[index].accion();
-        }
-		function toggleTV(e) {
-		if (e) e.stopPropagation();
-		if (tvEncendida) {
-        apagarTV();
-		} else {
-        encenderTV(e);
-    }
-}
-
-function apagarTV() {
-    tvEncendida = false;
-    document.getElementById('cntrl-box').classList.remove('retirado', 'encendido');
-    document.getElementById('control').classList.remove('tv-on');
-    document.getElementById('en-vivo').style.display = 'none';
-    document.getElementById('pantalla-video').style.display = 'none';
-    document.getElementById('sintonia').style.display = 'block';
-    document.getElementById('osd-menu').classList.remove('activo');
-
-    var layer1 = document.getElementById('video-layer-1');
-    var layer2 = document.getElementById('video-layer-2');
-    var webFrame = document.getElementById('web-frame');
-
-    if (layer1) { layer1.pause(); layer1.removeAttribute('src'); }
-    if (layer2) { layer2.pause(); layer2.removeAttribute('src'); }
-    if (webFrame) { webFrame.src = 'about:blank'; }
-}
-
-	function cambiarVolumen(delta) {
-    var layer1 = document.getElementById('video-layer-1');
-    var layer2 = document.getElementById('video-layer-2');
-
-    [layer1, layer2].forEach(function(v) {
-        if (v) {
-            var nuevoVol = Math.min(1, Math.max(0, v.volume + delta));
-            v.volume = nuevoVol;
-			document.getElementById('contador-viewers').style.opacity = '0';
-        }
-    });
-
-    // Mostrar barrita visual
-    var vol = layer1 ? layer1.volume : (layer2 ? layer2.volume : 1);
-    var porcentaje = Math.round(vol * 100);
-    document.getElementById('barra-vol').style.width = porcentaje + '%';
-    document.getElementById('txt-vol').textContent = porcentaje + '%';
-
-    var osd = document.getElementById('osd-volumen');
-    osd.style.opacity = '1';
-
-    // Ocultar la barrita después de 2 segundos
-    clearTimeout(window.volTimer);
-    window.volTimer = setTimeout(function() {
-        osd.style.opacity = '0';
-    }, 2000);
-}
-        function arrancarCuandoEsteLista() {
-    const estado = document.getElementById('estado-cargando');
-
-    if (bibliotecaLista) {
-        if (estado) estado.textContent = '';
-        cambiarCanal('zapping');
-    } else {
-        if (estado) estado.textContent = 'CARGANDO SEÑAL...';
-        setTimeout(arrancarCuandoEsteLista, 700);
-    }
-}
-		
-		function encenderTV(e) {
-            if (e) e.stopPropagation();
-            if (tvEncendida) return;
-            tvEncendida = true;
-
-            document.getElementById('cntrl-box').classList.add('retirado', 'encendido');
-            document.getElementById('control').classList.add('tv-on');
-            document.getElementById('en-vivo').style.display = 'flex';
-            
-            setTimeout(() => {
-			document.getElementById('sintonia').style.display = 'none';
-			document.getElementById('pantalla-video').style.display = 'block';
-			arrancarCuandoEsteLista();
-			}, 500);
-			document.getElementById('contador-viewers').style.opacity = '1';
-        }
-
-        function abrirMenu(e) {
-            if (e) e.stopPropagation();
-            if (!tvEncendida) return;
-            document.getElementById('osd-menu').classList.toggle('activo');
-        }
-
-           function cambiarCanal(bloque) {
-    if (!tvEncendida) return;
-    document.getElementById('osd-menu').classList.remove('activo');
-    clearTimeout(timerAvance);
-    bloqueActual = bloque;
-
-    // 🌐 CANALES EXTERNOS (URLs fijas, no dependen del JSON)
-    if (bloque === 'viernes' || bloque === 'universo') {
-        const urlsExternas = {
-            'viernes': 'https://aldosuarez10.github.io/viernes-misticos-radio/',
-            'universo': 'https://aldosuarez10.github.io/universo_segundo_anillo/'
-        };
-        const itemExterno = {
-            id: bloque,
-            titulo: bloque === 'viernes' ? 'Viernes Místicos' : 'Universo 2° Anillo',
-            tipo: 'web',
-            url: urlsExternas[bloque]
-        };
-        mostrarEnPantalla(itemExterno);
-        return;
-    }
-
-    // 📺 VIDEOS DE ARCHIVE (desde el JSON)
-    const video = elegirSiguiente(bloque === 'zapping' ? null : bloque);
-    if (!video) { 
-        if (bloque !== 'zapping') cambiarCanal('zapping'); 
-        return; 
-    }
-    mostrarEnPantalla(video);
-}
-
-        function elegirSiguiente(bloqueDeseado = null) {
-            // 1. Filtrar: Si no se pide bloque, EXCLUIR bumpers automáticamente
             let candidatos = biblioteca.filter(v => {
                 if (v.tipo !== "archive") return false;
                 if (bloqueDeseado) return v.bloque === bloqueDeseado;
-                return v.bloque !== "bumper"; // Zapping puro: solo videos
+                return v.bloque !== "bumper";
             });
             
-            // 2. Excluir historial reciente
             if (candidatos.length > 1) {
                 candidatos = candidatos.filter(v => !historialReciente.includes(v.id));
             }
             
-            // 3. Si se acabaron, limpiar historial y reintentar
             if (candidatos.length === 0) {
                 historialReciente = [];
                 candidatos = biblioteca.filter(v => {
@@ -563,7 +394,6 @@ function apagarTV() {
                 });
             }
 
-            // 4. Aplicar peso y elegir
             let pool = [];
             candidatos.forEach(v => { for (let i = 0; i < (v.peso || 1); i++) pool.push(v); });
             
@@ -576,6 +406,160 @@ function apagarTV() {
                 return elegido;
             }
             return null;
+        }
+
+        function obtenerRafagaBumpers() {
+            let bumpers = biblioteca.filter(v => v.bloque === "bumper" && !historialReciente.includes(v.id));
+            if (bumpers.length === 0) {
+                bumpers = biblioteca.filter(v => v.bloque === "bumper");
+            }
+            let rafaga = [];
+            let disponibles = [...bumpers];
+            for (let i = 0; i < 3 && disponibles.length > 0; i++) {
+                const idx = Math.floor(Math.random() * disponibles.length);
+                const elegido = disponibles.splice(idx, 1)[0];
+                rafaga.push(elegido);
+                historialReciente.push(elegido.id);
+                if (historialReciente.length > MAX_HISTORIAL) {
+                    historialReciente.shift();
+                }
+            }
+            return rafaga;
+        }
+
+        function generarMenuOSD() {
+            const menuContainer = document.getElementById('menu-dinamico');
+            const opciones = [
+                { label: "📺 ZAPPING", accion: () => cambiarCanal('zapping') },
+                { label: "🔍 MISTERIO", accion: () => cambiarCanal('misterio') },
+                { label: "📜 GEOPOLÍTICA", accion: () => cambiarCanal('historia') },
+                { label: "🧪 CIENCIA", accion: () => cambiarCanal('ciencia') },
+                { label: "🕉️ ESPIRITUALIDAD", accion: () => cambiarCanal('espiritualidad') },
+                { label: " VIERNES MÍSTICOS", accion: () => cambiarCanal('viernes') },
+                { label: "🌀 UNIVERSO 2° ANILLO", accion: () => cambiarCanal('universo') }
+            ];
+            menuContainer.innerHTML = opciones.map(op => `<div class="osd-opcion" onclick="ejecutarAccionMenu(this)">${op.label}</div>`).join('');
+            window.opcionesMenu = opciones;
+        }
+
+        function ejecutarAccionMenu(elemento) {
+            const index = Array.from(elemento.parentNode.children).indexOf(elemento);
+            window.opcionesMenu[index].accion();
+        }
+
+        function toggleTV(e) {
+            if (e) e.stopPropagation();
+            if (tvEncendida) {
+                apagarTV();
+            } else {
+                encenderTV(e);
+            }
+        }
+
+        function apagarTV() {
+            tvEncendida = false;
+            document.getElementById('cntrl-box').classList.remove('retirado', 'encendido');
+            document.getElementById('control').classList.remove('tv-on');
+            document.getElementById('en-vivo').style.display = 'none';
+            document.getElementById('pantalla-video').style.display = 'none';
+            document.getElementById('sintonia').style.display = 'block';
+            document.getElementById('osd-menu').classList.remove('activo');
+
+            var layer1 = document.getElementById('video-layer-1');
+            var layer2 = document.getElementById('video-layer-2');
+            var webFrame = document.getElementById('web-frame');
+
+            if (layer1) { layer1.pause(); layer1.removeAttribute('src'); }
+            if (layer2) { layer2.pause(); layer2.removeAttribute('src'); }
+            if (webFrame) { webFrame.src = 'about:blank'; }
+        }
+
+        function cambiarVolumen(delta) {
+            var layer1 = document.getElementById('video-layer-1');
+            var layer2 = document.getElementById('video-layer-2');
+
+            [layer1, layer2].forEach(function(v) {
+                if (v) {
+                    var nuevoVol = Math.min(1, Math.max(0, v.volume + delta));
+                    v.volume = nuevoVol;
+                }
+            });
+
+            var vol = layer1 ? layer1.volume : (layer2 ? layer2.volume : 1);
+            var porcentaje = Math.round(vol * 100);
+            document.getElementById('barra-vol').style.width = porcentaje + '%';
+            document.getElementById('txt-vol').textContent = porcentaje + '%';
+
+            var osd = document.getElementById('osd-volumen');
+            osd.style.opacity = '1';
+
+            clearTimeout(window.volTimer);
+            window.volTimer = setTimeout(function() {
+                osd.style.opacity = '0';
+            }, 2000);
+        }
+
+        function arrancarCuandoEsteLista() {
+            const estado = document.getElementById('estado-cargando');
+            if (bibliotecaLista) {
+                if (estado) estado.textContent = '';
+                cambiarCanal('zapping');
+            } else {
+                if (estado) estado.textContent = 'CARGANDO SEÑAL...';
+                setTimeout(arrancarCuandoEsteLista, 700);
+            }
+        }
+        
+        function encenderTV(e) {
+            if (e) e.stopPropagation();
+            if (tvEncendida) return;
+            tvEncendida = true;
+
+            document.getElementById('cntrl-box').classList.add('retirado', 'encendido');
+            document.getElementById('control').classList.add('tv-on');
+            document.getElementById('en-vivo').style.display = 'flex';
+            
+            setTimeout(() => {
+                document.getElementById('sintonia').style.display = 'none';
+                document.getElementById('pantalla-video').style.display = 'block';
+                arrancarCuandoEsteLista();
+            }, 500);
+            document.getElementById('contador-viewers').style.opacity = '1';
+        }
+
+        function abrirMenu(e) {
+            if (e) e.stopPropagation();
+            if (!tvEncendida) return;
+            document.getElementById('osd-menu').classList.toggle('activo');
+        }
+
+        function cambiarCanal(bloque) {
+            if (!tvEncendida) return;
+            document.getElementById('osd-menu').classList.remove('activo');
+            clearTimeout(timerAvance);
+            bloqueActual = bloque;
+
+            if (bloque === 'viernes' || bloque === 'universo') {
+                const urlsExternas = {
+                    'viernes': 'https://aldosuarez10.github.io/viernes-misticos-radio/',
+                    'universo': 'https://aldosuarez10.github.io/universo_segundo_anillo/'
+                };
+                const itemExterno = {
+                    id: bloque,
+                    titulo: bloque === 'viernes' ? 'Viernes Místicos' : 'Universo 2° Anillo',
+                    tipo: 'web',
+                    url: urlsExternas[bloque]
+                };
+                mostrarEnPantalla(itemExterno);
+                return;
+            }
+
+            const video = elegirSiguiente(bloque === 'zapping' ? null : bloque);
+            if (!video) { 
+                if (bloque !== 'zapping') cambiarCanal('zapping'); 
+                return; 
+            }
+            mostrarEnPantalla(video);
         }
 
         function reproducirBloqueFijo(bloque) {
@@ -596,8 +580,6 @@ function apagarTV() {
         }
 
         function mostrarEnPantalla(item, offsetSegundos = 0) {
-            
-            
             const flash = document.createElement('div');
             flash.className = 'flash-sintonia';
             document.getElementById('marco-tv').appendChild(flash);
@@ -707,11 +689,9 @@ function apagarTV() {
             }
         });
 
-        // CUANDO UN VIDEO TERMINA, PASAR AL SIGUIENTE
         document.querySelectorAll('.video-layer').forEach(layer => {
             layer.addEventListener('loadedmetadata', function() {
                 if (this.dataset.randomStart === 'true') {
-                    // Solo arrancar empezado si dura más de 20 minutos
                     if (this.duration > 1200) {
                         let target = Math.floor(Math.random() * 300) + 120;
                         this.currentTime = (this.duration < target) ? Math.max(0, this.duration - 30) : target;
@@ -726,18 +706,13 @@ function apagarTV() {
                 }
             });
 
-            // EVENTO CLAVE: Cuando el video termina naturalmente
             layer.addEventListener('ended', function() {
                 if (!tvEncendida) return;
-                
-                // Si estábamos en modo zapping con bumpers
                 if (colaBumpers.length > 0) {
                     reproducirSiguienteEnCola();
                 } else if (bloqueActual && bloqueActual !== 'zapping') {
-                    // Si estábamos en una categoría específica
                     reproducirBloqueFijo(bloqueActual);
                 } else {
-                    // Si estábamos en zapping general
                     reproducirSiguienteEnCola();
                 }
             });
@@ -751,10 +726,9 @@ function apagarTV() {
             }
         });
 
-                    generarMenuOSD();
+        generarMenuOSD();
         cargarPlaylist();
 
-        // CONTADOR DE VIEWERS EN LÍNEA
         let viewerCount = 14;
         function actualizarViewers() {
             const el = document.getElementById('viewer-count');
@@ -763,11 +737,8 @@ function apagarTV() {
                 viewerCount = Math.max(8, Math.min(25, viewerCount + cambio));
                 el.textContent = viewerCount;
             }
-            // Se programa siempre, esté la TV encendida o apagada
             setTimeout(actualizarViewers, (Math.random() * 45000) + 45000);
         }
-        
-        // Iniciar el contador
         actualizarViewers();
     </script>
 </body>
