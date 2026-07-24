@@ -1,7 +1,7 @@
 [
   {
     "id": "documental-tierra-plana-completo-naov-101219",
-    "titulo": "Documental tierra plana | completo-naov-101219",
+    "titulo": "Documental tierra plana | completo",
     "bloque": "ciencia",
     "tipo": "archive",
     "duracion": null,
@@ -57,7 +57,7 @@
   },
   {
     "id": "operazionelunastanleykubrikeilfintoallunaggio480x854",
-    "titulo": "Stanley Kubrik ei finto al lunaggio(italiano)",
+    "titulo": "Stanley Kubrik ei finto al lunaggio (italiano)",
     "bloque": "ciencia",
     "tipo": "archive",
     "duracion": null,
@@ -81,7 +81,7 @@
   },
   {
     "id": "youtube-YbtsmgdDJ20",
-    "titulo": "ES REALMENTE TUYA TU MENTE? PARASITOS ENERGÉTICOS.",
+    "titulo": "ES REALMENTE TUYA TU MENTE? PARASITOS ENERGÉTICOS",
     "bloque": "espiritualidad",
     "tipo": "archive",
     "duracion": null,
@@ -97,7 +97,7 @@
   },
   {
     "id": "educativos3_yelkarmadijoalgundiavasallorarporcosasqueanteshicisteentrerisas_3d0b41cb",
-    "titulo": "El Karma dijo algun dia vas a llorar por cosas que antes hiciste entre risas",
+    "titulo": "El Karma dijo algun dia vas a llorar",
     "bloque": "espiritualidad",
     "tipo": "archive",
     "duracion": null,
@@ -152,8 +152,232 @@
     "peso": 9
   },
   {
+    "id": "youtube-jBvY0C8U4iI",
+    "titulo": "La DIMENSION OCULTA esta EN TU SER - Jacobo Grinberg",
+    "bloque": "espiritualidad",
+    "tipo": "archive",
+    "duracion": null,
+    "peso": 9
+  },
+  {
+    "id": "3-en-el-umbral-de-la-consciencia",
+    "titulo": "En el umbral de la conciencia - Carlos Pastor",
+    "bloque": "espiritualidad",
+    "tipo": "archive",
+    "duracion": null,
+    "peso": 9
+  },
+  {
+    "id": "youtube-xtDPMvwcluI",
+    "titulo": "¿SE PUEDE ALTERAR LA REALIDAD? | Jacobo Grinberg",
+    "bloque": "espiritualidad",
+    "tipo": "archive",
+    "duracion": null,
+    "peso": 9
+  },
+  {
+    "id": "the-secrets-of-jacobo-grenberg-1",
+    "titulo": "EL SECRETO DE JACOBO GRIMBERG (Documental)",
+    "bloque": "espiritualidad",
+    "tipo": "archive",
+    "duracion": null,
+    "peso": 9
+  },
+  {
+    "id": "la-fuerza-de-la-necesidad",
+    "titulo": "La Fuerza De La Necesidad",
+    "bloque": "espiritualidad",
+    "tipo": "archive",
+    "duracion": null,
+    "peso": 9
+  },
+  {
+    "id": "mcpsmd-Momento_de_Atencion_Plena_-_Enfoque_en_Afirmaciones",
+    "titulo": "Momento de Atención Plena: Afirmaciones",
+    "bloque": "espiritualidad",
+    "tipo": "archive",
+    "duracion": null,
+    "peso": 9
+  },
+  {
+    "id": "teoria-y-practica-de-la-meditacion",
+    "titulo": "TEORIA Y PRACTICA DE LA MEDITACION",
+    "bloque": "espiritualidad",
+    "tipo": "archive",
+    "duracion": null,
+    "peso": 9
+  },
+  {
+    "id": "consejos-practicos-para-mejorar-la-meditacion",
+    "titulo": "CONSEJOS PRACTICOS PARA MEJORAR LA MEDITACION",
+    "bloque": "espiritualidad",
+    "tipo": "archive",
+    "duracion": null,
+    "peso": 9
+  },
+  {
+    "id": "meditacion-y-experiencias-cercanas-a-la-muerte",
+    "titulo": "MEDITACION Y EXPERIENCIAS CERCANAS A LA MUERTE",
+    "bloque": "espiritualidad",
+    "tipo": "archive",
+    "duracion": null,
+    "peso": 9
+  },
+  {
+    "id": "youtube-sr-PQ0PgtwU",
+    "titulo": "LA ARMONIA DEL ABSOLUTO",
+    "bloque": "espiritualidad",
+    "tipo": "archive",
+    "duracion": null,
+    "peso": 9
+  },
+  {
+    "id": "jacobo-grinberg-video-rescatado-y-editado",
+    "titulo": "Jacobo Grinberg - LA CONSCIENCIA",
+    "bloque": "espiritualidad",
+    "tipo": "archive",
+    "duracion": null,
+    "peso": 9
+  },
+  {
+    "id": "youtube-3KCOIGuGK9Q",
+    "titulo": "MANIPULACION Y MENSAJES SUBLIMINALES",
+    "bloque": "espiritualidad",
+    "tipo": "archive",
+    "duracion": null,
+    "peso": 9
+  },
+  {
+    "id": "LASCUATROLEYESDELAMENTESUBCONSCIENTEYSUAPLICACIONPARATRIUNFAR",
+    "titulo": "LAS 4 LEYES DE LA MENTE SUBCONSCIENTE",
+    "bloque": "espiritualidad",
+    "tipo": "archive",
+    "duracion": null,
+    "peso": 9
+  },
+  {
+    "id": "an-introduction-to-tai-chi-chi-kung-by-lucy-lloyd-barker-2000-dual-eng-spa",
+    "titulo": "An Introduction To Tai Chi: Chi Kung",
+    "bloque": "espiritualidad",
+    "tipo": "archive",
+    "duracion": null,
+    "peso": 9
+  },
+  {
     "id": "youtube-qYXIR2ffSA0",
     "titulo": "Imagenes Tartaria",
+    "bloque": "misterio",
+    "tipo": "archive",
+    "duracion": null,
+    "peso": 9
+  },
+  {
+    "id": "Peldanovideo2014x03MisteriosDelCaminoDeSantiago",
+    "titulo": "Misterios Del Camino De Santiago",
+    "bloque": "misterio",
+    "tipo": "archive",
+    "duracion": null,
+    "peso": 9
+  },
+  {
+    "id": "los-grandes-misterios-del-tercer-milenio-no-15-julio-2007",
+    "titulo": "Los Grandes Misterios del Tercer Milenio",
+    "bloque": "misterio",
+    "tipo": "archive",
+    "duracion": null,
+    "peso": 9
+  },
+  {
+    "id": "todos-estos-temas-jamas-los-oiste-el-iceberg-de-la-desinformacion-24",
+    "titulo": "TEMAS JAMÁS OÍSTE - Iceberg Desinformación 24",
+    "bloque": "misterio",
+    "tipo": "archive",
+    "duracion": null,
+    "peso": 9
+  },
+  {
+    "id": "este-iceberg-no-existe-el-iceberg-de-la-desinformacion-14-thedemie2-reitanthekiller",
+    "titulo": "TEMAS JAMÁS OÍSTE - Iceberg Desinformación 14",
+    "bloque": "misterio",
+    "tipo": "archive",
+    "duracion": null,
+    "peso": 9
+  },
+  {
+    "id": "los-misterios-de-egipto",
+    "titulo": "Los Misterios De Egipto",
+    "bloque": "misterio",
+    "tipo": "archive",
+    "duracion": null,
+    "peso": 9
+  },
+  {
+    "id": "misterios-no-resueltos",
+    "titulo": "Misterios No Resueltos",
+    "bloque": "misterio",
+    "tipo": "archive",
+    "duracion": null,
+    "peso": 9
+  },
+  {
+    "id": "youtube-Z-_etlMbzmo",
+    "titulo": "5 MISTERIOS MODERNOS sin resolver",
+    "bloque": "misterio",
+    "tipo": "archive",
+    "duracion": null,
+    "peso": 9
+  },
+  {
+    "id": "youtube-0UVlZHSx0cA",
+    "titulo": "Misterios de la criptozoología",
+    "bloque": "misterio",
+    "tipo": "archive",
+    "duracion": null,
+    "peso": 9
+  },
+  {
+    "id": "youtube-XcY1EyJYgdU",
+    "titulo": "Los 8 grandes misterios sin resolver de la arqueología",
+    "bloque": "misterio",
+    "tipo": "archive",
+    "duracion": null,
+    "peso": 9
+  },
+  {
+    "id": "nos-esta-n-engan-ando-despierta-misterios-ocultos-tv-230210",
+    "titulo": "NOS ESTÁN ENGAÑANDO DESPIERTA - Misterios Ocultos TV",
+    "bloque": "misterio",
+    "tipo": "archive",
+    "duracion": null,
+    "peso": 9
+  },
+  {
+    "id": "fuerzas-ocultas-los-misterios-de-la-masoneria",
+    "titulo": "Fuerzas Ocultas (Los Misterios de la Masonería)",
+    "bloque": "misterio",
+    "tipo": "archive",
+    "duracion": null,
+    "peso": 9
+  },
+  {
+    "id": "youtube-r8TrPnNMbWk",
+    "titulo": "10 MISTERIOS sobre el mundo Disney",
+    "bloque": "misterio",
+    "tipo": "archive",
+    "duracion": null,
+    "peso": 9
+  },
+  {
+    "id": "youtube-ciLJ_KY6jEM",
+    "titulo": "Los misterios de la vida de Michael Jackson",
+    "bloque": "misterio",
+    "tipo": "archive",
+    "duracion": null,
+    "peso": 9
+  },
+  {
+    "id": "misterios-da-antiga-china-0101-segredos-da-grande-muralha-pr",
+    "titulo": "Mistérios Da Antiga China - Gran Muralla",
     "bloque": "misterio",
     "tipo": "archive",
     "duracion": null,
@@ -177,7 +401,7 @@
   },
   {
     "id": "la-corporacion-en-espanol-documental",
-    "titulo": "La Corporación| Documental (español)",
+    "titulo": "La Corporación | Documental (español)",
     "bloque": "historia",
     "tipo": "archive",
     "duracion": null,
@@ -185,7 +409,7 @@
   },
   {
     "id": "74wilhemreichylaorgonomiamp4",
-    "titulo": "Wilhem Reich | La Orgonomia",
+    "titulo": "Wilhem Reich | La Orgonomía",
     "bloque": "historia",
     "tipo": "archive",
     "duracion": null,
@@ -217,7 +441,7 @@
   },
   {
     "id": "documental-jacques-de-mahieu-la-farsa-de-colon-y-el-descubrimiento-de-america-1",
-    "titulo": "Documental jacques-de-mahieu | La farsa del descubrimiento",
+    "titulo": "La farsa del descubrimiento | Jacques de Mahieu",
     "bloque": "historia",
     "tipo": "archive",
     "duracion": null,
@@ -225,7 +449,7 @@
   },
   {
     "id": "el-informe-leuchter-como-se-nos-oculta-la-verdad",
-    "titulo": "Informe Leuchter | Se-nos-oculta-la-verdad",
+    "titulo": "Informe Leuchter | Se nos oculta la verdad",
     "bloque": "historia",
     "tipo": "archive",
     "duracion": null,
@@ -233,7 +457,7 @@
   },
   {
     "id": "whats-app-video-2025-10-25-at-13.55.35",
-    "titulo": "⚔️ LA HISTORIA SIEMPRE LA CUENTAN LOS VENCEDORES 🕰️",
+    "titulo": "LA HISTORIA SIEMPRE LA CUENTAN LOS VENCEDORES",
     "bloque": "historia",
     "tipo": "archive",
     "duracion": null,
@@ -241,7 +465,7 @@
   },
   {
     "id": "youtube-JorKMC1UU6Q",
-    "titulo": "CIVILIZACIÓN, CIENCIA Y CULTURA EN HISPANOAMÉRICA (LG)",
+    "titulo": "CIVILIZACIÓN, CIENCIA Y CULTURA EN HISPANOAMÉRICA",
     "bloque": "historia",
     "tipo": "archive",
     "duracion": null,
@@ -249,7 +473,7 @@
   },
   {
     "id": "youtube-IMHCxrkGaMA",
-    "titulo": "Sin DIOS, ni PATRIA, ni FAMILIA | La propuesta WOKE | élites",
+    "titulo": "Sin DIOS, ni PATRIA, ni FAMILIA | La propuesta WOKE",
     "bloque": "historia",
     "tipo": "archive",
     "duracion": null,
@@ -257,7 +481,7 @@
   },
   {
     "id": "youtube-kut50kZgyZE",
-    "titulo": "¿Cómo se gestó la AGENDA 2030? | Consultora ONU y OEA",
+    "titulo": "¿Cómo se gestó la AGENDA 2030?",
     "bloque": "historia",
     "tipo": "archive",
     "duracion": null,
@@ -297,15 +521,7 @@
   },
   {
     "id": "que-es-un-teorico-de-la-conspiracion",
-    "titulo": "QUÉ ES UN TEÓRICO DE COSNPIRACIÓN",
-    "bloque": "historia",
-    "tipo": "archive",
-    "duracion": null,
-    "peso": 9
-  },
-  {
-    "id": "youtube-rl59U6LNpQE",
-    "titulo": "El GRAN RESETEO",
+    "titulo": "QUÉ ES UN TEÓRICO DE CONSPIRACIÓN",
     "bloque": "historia",
     "tipo": "archive",
     "duracion": null,
@@ -344,8 +560,16 @@
     "peso": 9
   },
   {
+    "id": "los-tecnocratas-misterios-y-negocios-con-terapia-liberal",
+    "titulo": "Los TECNÓCRATAS | Misterios y Negocios",
+    "bloque": "historia",
+    "tipo": "archive",
+    "duracion": null,
+    "peso": 9
+  },
+  {
     "id": "bamper-3",
-    "titulo": "bamper-3",
+    "titulo": "Bumper 3",
     "bloque": "bumper",
     "tipo": "archive",
     "duracion": null,
@@ -353,7 +577,7 @@
   },
   {
     "id": "bamper-central-1",
-    "titulo": "bamper-central-1",
+    "titulo": "Bumper Central 1",
     "bloque": "bumper",
     "tipo": "archive",
     "duracion": null,
